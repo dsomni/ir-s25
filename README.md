@@ -19,13 +19,11 @@ You can start with `uv sync`.
 
 Optionally, you can run `bash setup_precommit.sh` to setup pre-commit hook for GitHub for code formatting using [ruff](https://docs.astral.sh/ruff/).
 
-We also highly recommend reading report to fully understand context and purpose of some files and folders.
-
 ## Repository structure
 
 ```text
 ├── data                 # Data used in project
-├───── ...
+├───── scrapped          # Dirty scrapped data
 |
 ├── src                  # Source notebooks and scripts
 ├───── ...
