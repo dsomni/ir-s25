@@ -10,10 +10,12 @@ dependencies = [
     "requests>=2.32.3",
     "ruff>=0.9.4",
     "tqdm>=4.67.1",
+    "whoosh>=2.7.4",
 ]
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
+extend-select = ["I"]
 fix=true
 line-length = 90
 
