@@ -1,23 +1,15 @@
 import uvicorn
 from dotenv import dotenv_values
 from fastapi import FastAPI
-from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
+
+from src.pippeline import Pipeline
 
 CONFIG = dotenv_values(".env")
 
+PIPELINE = Pipeline()
 
-@asynccontextmanager
-async def lifespan(_app: FastAPI):
-    # Before start
-    ### Check and build if necessary all the index/stuff
-    yield
-    # After finish
-
-
-app = FastAPI(
-    lifespan=lifespan,
-)
+app = FastAPI()
 
 # Allow CORS for frontend communication
 app.add_middleware(
@@ -30,7 +22,11 @@ app.add_middleware(
 
 @app.get("/search")
 async def search(query: str):
-    return {"proposals": [query] * 10}
+    corrected_query, proposals = PIPELINE(query)
+    return {
+        "corrected": corrected_query,
+        "proposals": [{"document": doc, "score": score} for doc, score in proposals],
+    }
 
 
 if __name__ == "__main__":

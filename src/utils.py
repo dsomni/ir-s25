@@ -1,4 +1,6 @@
 import json
+import os
+from pathlib import Path
 
 
 def save_json(path: str, data: dict):
@@ -35,3 +37,8 @@ def load(path: str) -> str:
         encoding="utf-8",
     ) as f:
         return f.read()
+
+
+def from_current_file(path: str) -> Path:
+    dirname = os.path.dirname(__file__)
+    return Path(os.path.join(dirname, path))
