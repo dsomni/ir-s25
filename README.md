@@ -19,6 +19,28 @@ You can start with `uv sync`.
 
 Optionally, you can run `bash setup_precommit.sh` to setup pre-commit hook for GitHub for code formatting using [ruff](https://docs.astral.sh/ruff/).
 
+## Start
+
+### Production
+
+`uv run fastapi run`
+`cd frontend`
+`yarn build`
+`yarn start`
+
+Or, alternatively:
+`./run_prod.bat` for Windows
+`bash ./run_prod.sh` for Linux
+
+### Development
+
+`uv run fastapi dev`
+`yarn dev`
+
+Or, alternatively:
+`./run_dev.bat` for Windows
+`bash ./run_dev.sh` for Linux
+
 ## Repository structure
 
 ```text
