@@ -8,6 +8,7 @@ dependencies = [
     "beautifulsoup4>=4.13.3",
     "fastapi[standard]>=0.115.11",
     "ipykernel>=6.29.5",
+    "nltk>=3.9.1",
     "python-dotenv>=1.0.1",
     "requests>=2.32.3",
     "ruff>=0.9.4",
