@@ -6,7 +6,6 @@ from pathlib import Path
 
 import nltk
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from tqdm import tqdm
 
 from src.utils import from_current_file, load_json, save_json
@@ -44,7 +43,7 @@ class NorvigSpellCorrector:
         self.load_index()
 
     def tokenize(self, text: str) -> list[str]:
-        return word_tokenize(text.lower())
+        return re.findall(r"\w+", text.lower())
 
     def filter_stopwords(self, words: list[str]) -> list[str]:
         return [word for word in words if word not in self._stop_words]
@@ -119,8 +118,6 @@ class NorvigSpellCorrector:
         return set(w for w in words if w in self.words_counter)
 
     def _word_candidates_saved(self, word: str) -> list[str]:
-        if len(self.filter_known([word])) > 0:
-            return [word]
         if self.save_distances:
             return self._word_candidates_saved(word)
         for i in range(self._max_edits):
@@ -132,9 +129,6 @@ class NorvigSpellCorrector:
     def word_candidates(self, word: str) -> list[str]:
         if self.save_distances:
             return self._word_candidates_saved(word)
-
-        if len(self.filter_known([word])) > 0:
-            return [word]
 
         edits = {word}
         for _ in range(self._max_edits):
@@ -148,6 +142,9 @@ class NorvigSpellCorrector:
         return [word]
 
     def spell_correction_word(self, word: str) -> str:
+        print(word, word in self.words_counter)
+        if word in self.words_counter:
+            return word
         return max(self.word_candidates(word), key=self.word_probability)
 
     def spell_correction(self, text: str) -> str:
@@ -155,7 +152,7 @@ class NorvigSpellCorrector:
         if len(tokens) == 1:
             return self.spell_correction_word(tokens[0])
         corrected = ""
-        for idx, token in enumerate(tokens):
+        for token in tokens:
             if token in string.punctuation:
                 if len(corrected) > 0 and corrected[-1] == " ":
                     corrected = corrected[:-1]

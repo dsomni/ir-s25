@@ -1,4 +1,5 @@
 import json
+import math
 import os
 from pathlib import Path
 
@@ -42,3 +43,8 @@ def load(path: str) -> str:
 def from_current_file(path: str) -> Path:
     dirname = os.path.dirname(__file__)
     return Path(os.path.join(dirname, path))
+
+
+def round_float(x: float, places: int = 3) -> float:
+    a = 10**places
+    return math.ceil(x * a) / a
