@@ -142,7 +142,6 @@ class NorvigSpellCorrector:
         return [word]
 
     def spell_correction_word(self, word: str) -> str:
-        print(word, word in self.words_counter)
         if word in self.words_counter:
             return word
         return max(self.word_candidates(word), key=self.word_probability)
