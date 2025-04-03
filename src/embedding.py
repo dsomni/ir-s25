@@ -10,7 +10,7 @@ from annoy import AnnoyIndex
 from nltk.corpus import stopwords
 from tqdm import tqdm
 
-from utils import from_current_file, load_json, round_float, save_json
+from src.utils import from_current_file, load_json, round_float, save_json
 
 nltk.download("stopwords")
 nltk.download("punkt_tab")
