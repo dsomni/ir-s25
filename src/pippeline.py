@@ -1,4 +1,5 @@
 from src.indexer import Indexer
+from src.embedding import Word2VecIndexer
 from src.spellcheck import NorvigSpellCorrector
 
 PipelineOutput = tuple[
@@ -9,10 +10,17 @@ PipelineOutput = tuple[
 class Pipeline:
     def __init__(self) -> None:
         self.indexer = Indexer()
+        self.W2Vindexer = Word2VecIndexer()
         self.corrector = NorvigSpellCorrector()
 
-    def __call__(self, query: str) -> PipelineOutput:
+    def inverted_index(self, query: str) -> PipelineOutput:
         corrected_query = self.corrector.spell_correction(query)
         scored_docs = self.indexer.find(corrected_query)
+
+        return (corrected_query, scored_docs)
+    
+    def w2v(self, query: str) -> PipelineOutput:
+        corrected_query = self.corrector.spell_correction(query)
+        scored_docs = self.W2Vindexer.find(corrected_query)
 
         return (corrected_query, scored_docs)

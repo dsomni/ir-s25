@@ -38,9 +38,9 @@ app.add_middleware(
 @app.get("/search")
 async def search(query: str, indexer: str):
     if indexer == "word2vec":
-        corrected_query, proposals = PIPELINE(query)
+        corrected_query, proposals = PIPELINE.w2v(query)
     elif indexer == "inverted_idx":
-        corrected_query, proposals = PIPELINE(query)
+        corrected_query, proposals = PIPELINE.inverted_index(query)
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Indexer '{indexer}' not found"
