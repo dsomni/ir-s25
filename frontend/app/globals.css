@@ -40,3 +40,25 @@ a {
     color-scheme: dark;
   }
 }
+
+
+
+:root {
+  /* Matrix-inspired green palette */
+  /* --matrix-primary: #00ff41;
+  --matrix-secondary: #008f11;
+  --matrix-accent: #00ff99;
+  --matrix-dark: #003b00;
+  --matrix-light: #ccffcc; */
+
+  --matrix-primary: #ff69b4;
+  --matrix-secondary: #ff1493;
+  --matrix-accent: #ff85c2;
+  --matrix-dark: #8b004b;
+  --matrix-light: #ffc0e6;
+
+  /* Text colors */
+  --text-matrix: var(--matrix-primary);
+  --text-matrix-dim: var(--matrix-secondary);
+  --text-matrix-bright: var(--matrix-accent);
+}

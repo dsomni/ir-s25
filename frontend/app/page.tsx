@@ -1,9 +1,15 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import styles from "./page.module.css";
 import Dropdown from '@/components/Dropdown';
+import dynamic from 'next/dynamic';
+
+const MatrixBackground = dynamic(
+  () => import('@/components/MatrixBackground'),
+  { ssr: false }
+);
 
 interface Proposal {
   document: string;
@@ -20,54 +26,109 @@ export default function Home() {
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [correctedQuery, setCorrectedQuery] = useState<string | null>(null);
   const [indexerType, setIndexerType] = useState<string>('word2vec');
+  const [isSearching, setIsSearching] = useState(false);
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-
-
-  const handleSearch = useCallback(async (queryInner: string) => {
-    setQuery(queryInner);
-    if (!queryInner) {
+  const performSearch = useCallback(async (searchQuery: string, searchIndexer: string) => {
+    if (!searchQuery) {
       setProposals([]);
       setCorrectedQuery(null);
+      setIsSearching(false);
       return;
     }
 
+    setIsSearching(true);
     try {
       const response = await axios.get(
-        `${process.env.API_URL}/search?query=${queryInner}&indexer=${indexerType}`
+        `${process.env.API_URL}/search?query=${searchQuery}&indexer=${searchIndexer}`
       );
       setCorrectedQuery(response.data.corrected);
       setProposals(response.data.proposals);
     } catch (error) {
       console.error("Error fetching proposals:", error);
+    } finally {
+      setIsSearching(false);
     }
-  }, [indexerType]);
+  }, []);
+
+  // Debounced search handler for input changes
+  const handleSearchInput = useCallback((newQuery: string) => {
+    setQuery(newQuery);
+
+    // Clear previous timeout
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    // Set new timeout
+    searchTimeoutRef.current = setTimeout(() => {
+      performSearch(newQuery, indexerType);
+    }, 500);
+  }, [indexerType, performSearch]);
+
+  // Handle indexer type changes
+  const handleIndexerChange = useCallback((newIndexer: string) => {
+    setIndexerType(newIndexer);
+    // Perform search immediately when indexer changes
+    if (query) {
+      // Clear any pending debounced search
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+      performSearch(query, newIndexer);
+    }
+  }, [query, performSearch]);
+
+  // Clean up timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>Search</div>
-      <Dropdown
-        options={indexerOptions}
-        initialValue="word2vec"
-        onChange={setIndexerType}
-      />
-      <div className={styles.inputWrapper}>
+      <MatrixBackground />
+
+      <h1 className={styles.header}>Search</h1>
+
+      <div className={styles.searchRow}>
+        <Dropdown
+          options={indexerOptions}
+          value={indexerType}
+          onChange={handleIndexerChange}
+        />
         <input
           className={styles.input}
           type="text"
           value={query}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleSearchInput(e.target.value)}
           placeholder="Type to search..."
         />
+        {isSearching && <span className={styles.searchIndicator}>...</span>}
       </div>
-      {!!correctedQuery && <div>Corrected: {correctedQuery}</div>}
 
-      <ul>
+      {correctedQuery && correctedQuery != query && (
+        <div className={styles.corrected}>
+          Did you mean: <span>{correctedQuery}</span>?
+        </div>
+      )}
+
+      <div className={styles.results}>
         {proposals.map((item, index) => (
-          <div key={index}>
-            <a href={`/${item.document}`}>{item.document}</a>, {item.score}
+          <div key={index} className={styles.resultItem}>
+            <a
+              href={`/${item.document}`}
+              className={styles.document}
+            >
+              {item.document}
+            </a>
+            <span className={styles.score}> (score: {item.score.toFixed(2)})</span>
           </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

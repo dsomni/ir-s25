@@ -1,0 +1,92 @@
+.container {
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+}
+
+.documentCard {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--pink-primary);
+    border-radius: 0.5rem;
+    padding: 2rem;
+    color: var(--pink-light);
+    position: relative;
+    z-index: 1;
+}
+
+.header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--pink-dark);
+}
+
+.elementType {
+    display: inline-block;
+    color: var(--pink-accent);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    color: var(--pink-primary);
+    font-size: 1.5rem;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.from {
+    color: var(--pink-light);
+    font-weight: normal;
+    text-transform: lowercase;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.sectionTitle {
+    color: var(--pink-primary);
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--matrix-dark);
+    padding-bottom: 0.3rem;
+}
+
+.parameters {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 0.3rem;
+    border-left: 3px solid var(--matrix-accent);
+    overflow-x: auto;
+    font-family: monospace;
+    white-space: pre-wrap;
+    color: var(--matrix-light);
+    line-height: 1.5;
+}
+
+.description {
+    line-height: 1.6;
+}
+
+.description p {
+    margin-bottom: 1rem;
+}
+
+.backLink {
+    margin-top: 2rem;
+}
+
+.backLink a {
+    color: var(--matrix-primary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.backLink a:hover {
+    color: var(--matrix-accent);
+    text-decoration: underline;
+}

@@ -1,7 +1,6 @@
-'use client'; // Mark as Client Component
+'use client';
 
-import { useState } from 'react';
-import styles from './Dropdown.module.css'; // Optional CSS module
+import styles from './Dropdown.module.css';
 
 interface DropdownOption {
     value: string;
@@ -10,41 +9,33 @@ interface DropdownOption {
 
 interface DropdownProps {
     options: DropdownOption[];
-    initialValue?: string;
-    label?: string;
+    value: string;
     onChange: (value: string) => void;
     className?: string;
 }
 
 export default function Dropdown({
     options,
-    initialValue = '',
-    label,
+    value,
     onChange,
     className = ''
 }: DropdownProps) {
-    const [selectedValue, setSelectedValue] = useState(initialValue);
-
-    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
-        setSelectedValue(value);
-        onChange(value);
-    };
-
     return (
         <div className={`${styles.container} ${className}`}>
-            {label && <label className={styles.label}>{label}</label>}
-            <select
-                value={selectedValue}
-                onChange={handleChange}
-                className={styles.select}
-            >
-                {options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                        {option.label}
-                    </option>
-                ))}
-            </select>
+            <div className={styles.selectWrapper}>
+                <select
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    className={styles.select}
+                >
+                    {options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+                <span className={styles.arrow}></span>
+            </div>
         </div>
     );
 }

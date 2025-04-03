@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.pippeline import Pipeline
-from src.utils import load
+from src.utils import load, parse_document_content
 
 DATA_PATH = os.path.join("./data/scrapped/class_data_function__1_1")
 CONFIG = dotenv_values(".env")
@@ -63,6 +63,7 @@ async def document_page(name: str):
         ) from e
     return {
         "name": name,
+        **parse_document_content(content),
         "content": content,
     }
 
