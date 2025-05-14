@@ -4,6 +4,13 @@ import './globals.css';
 
 
 
+import dynamic from "next/dynamic";
+
+const MatrixBackground = dynamic(
+  () => import('@/components/MatrixBackground'),
+  { ssr: true }
+);
+
 export const metadata: Metadata = {
   title: "PyFinder",
 };
@@ -24,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${ibmPlexMono.variable}`}>
       <body className="font-mono bg-black text-green-400">
+        <MatrixBackground />
         {children}
       </body>
     </html>

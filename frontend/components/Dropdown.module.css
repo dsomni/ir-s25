@@ -35,6 +35,12 @@
     cursor: pointer;
 }
 
+.select option {
+    background-color: black;
+    color: var(--matrix-primary);
+    border-radius: 0.5rem;
+}
+
 .selectWrapper.focused {
     box-shadow: 0 0 0 2px var(--matrix-accent);
 }

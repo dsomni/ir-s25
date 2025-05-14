@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import styles from './MatrixBackground.module.css';
+import { useEffect, useState } from "react";
+import styles from "./MatrixBackground.module.css";
 
 const MatrixBackground = () => {
     const [isMounted, setIsMounted] = useState(false);
@@ -13,7 +13,7 @@ const MatrixBackground = () => {
     if (!isMounted) return null;
 
     const chars = "0123456789"; // More varied characters
-    const columns = 40; // Fewer but more visible columns
+    const columns = 50; // Fewer but more visible columns
 
     return (
         <div className={styles.matrixBackground}>
@@ -23,17 +23,20 @@ const MatrixBackground = () => {
                     className={styles.matrixColumn}
                     style={{
                         animationDuration: `${Math.random() * 8 + 8}s`, // Slower animation
-                        animationDelay: `${Math.random() * 5}s`,
-                        left: `${i * 2.5}%` // Better spacing
+                        animationDelay: `${Math.random() * 4}s`,
+                        left: `${i * 2.5}%`, // Better spacing
                     }}
                 >
-                    {Array.from({ length: 20 }).map((_, j) => (
+                    {Array.from({ length: 25 }).map((_, j) => (
                         <div
                             key={j}
                             className={styles.matrixChar}
                             style={{
-                                color: Math.random() > 0.5 ? 'var(--matrix-accent)' : 'var(--matrix-secondary)', // Brighter colors
-                                opacity: Math.random() * 0.7 + 0.3 // More visible
+                                color:
+                                    Math.random() > 0.5
+                                        ? "var(--matrix-accent)"
+                                        : "var(--matrix-secondary)", // Brighter colors
+                                opacity: Math.random() * 0.7 + 0.3, // More visible
                             }}
                         >
                             {chars.charAt(Math.floor(Math.random() * chars.length))}

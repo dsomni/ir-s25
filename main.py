@@ -55,7 +55,6 @@ async def search(query: str, indexer: str):
 @app.get("/document")
 async def document_page(name: str):
     try:
-        print(os.path.join(DATA_PATH, name))
         content = load(os.path.join(DATA_PATH, f"{name}.txt"))
     except FileNotFoundError as e:
         raise HTTPException(
@@ -65,6 +64,25 @@ async def document_page(name: str):
         "name": name,
         **parse_document_content(content),
         "content": content,
+    }
+
+
+@app.get("/models")
+async def get_llm_list():
+    return ["model1", "model2", "model3"]
+
+
+@app.get("/chat")
+async def chat(prompt: str, k: int, model: str):
+    if k == 1:
+        raise FileExistsError
+    return {
+        "answer": f"{prompt} {k} {model}" * 10,
+        "error": "",
+        "proposals": [
+            {"document": doc, "score": score}
+            for doc, score in [(model, i) for i in range(k)]
+        ],
     }
 
 

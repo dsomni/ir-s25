@@ -1,0 +1,17 @@
+.backLink {
+    /* margin-top: 2rem; */
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+}
+
+.backLink a {
+    color: var(--matrix-primary);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.backLink a:hover {
+    color: var(--matrix-accent);
+    text-decoration: underline;
+}

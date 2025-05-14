@@ -6,7 +6,7 @@
 }
 
 .header {
-  font-size: 3rem;
+  font-size: 5rem;
   margin-bottom: 2rem;
   text-align: center;
   font-weight: 700;
@@ -14,85 +14,50 @@
   letter-spacing: 0.2em;
 }
 
-.searchRow {
+.links {
   display: flex;
-  gap: 0.75rem;
-  /* Reduced gap */
+  flex-direction: column;
+  gap: 2rem;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid var(--matrix-primary);
+  justify-content: center;
+  margin-top: 5rem;
 }
 
-.input {
-  flex-grow: 1;
-  padding: 0.5rem 0.75rem;
-  height: 40px;
-  /* Fixed height */
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid var(--matrix-primary);
+.bigLink {
+  font-size: 1.75rem;
   color: var(--matrix-primary);
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  /* Match dropdown font */
+  border: 1px solid var(--matrix-primary);
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s;
 }
 
-/* Adjust the arrow size to match */
-.arrow {
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid var(--matrix-primary);
-  right: 0.75rem;
+.bigLink:hover {
+  background: var(--matrix-primary);
+  color: var(--background);
 }
 
-.input:focus {
-  outline: none;
-  box-shadow: 0 0 10px var(--matrix-primary);
-}
-
-.results {
+.authors {
   margin-top: 2rem;
-  position: relative;
+  font-size: 1rem;
+  color: var(--foreground);
+  opacity: 0.8;
+  text-align: center;
 }
 
-.resultItem {
-  padding: 1rem;
-  margin-bottom: 0.5rem;
-  border-left: 2px solid var(--matrix-primary);
-  transition: all 0.3s ease;
-  background: rgba(0, 255, 65, 0.05);
-}
-
-.resultItem:hover {
-  border-left: 2px solid var(--matrix-primary);
-}
-
-.score {
-  color: var(--matrix-accent);
-  font-weight: bold;
-}
-
-.document {
+.githubLink {
+  position: absolute;
+  bottom: 1rem;
+  right: 1.5rem;
+  font-size: 1.2rem;
   color: var(--matrix-primary);
   text-decoration: none;
+  opacity: 0.7;
 }
 
-.document:hover {
-  text-decoration: underline;
+.githubLink:hover {
+  opacity: 1;
 }
-
-.corrected {
-  margin-top: 1rem;
-  padding: 0.5rem;
-  background: rgba(0, 255, 65, 0.1);
-  border-left: 2px solid var(--matrix-accent);
-}
-
-.searchIndicator {
-  color: var(--matrix-primary);
-  margin-left: 0.5rem;
-  font-size: 1.2rem;
-}
-
-/* Keep all other existing styles, just replace color codes */
