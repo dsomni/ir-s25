@@ -84,7 +84,6 @@ export default function DocumentPage({
 
     return (
         <div className={styles.container}>
-            <MatrixBackground />
 
             <div className={styles.documentCard}>
                 <div className={styles.header}>
@@ -113,7 +112,7 @@ export default function DocumentPage({
                 </div>}
 
                 <div className={styles.backLink}>
-                    <Link href="/">← Back to Search</Link>
+                    <Link href="/search">← Back to Search</Link>
                 </div>
             </div>
         </div>

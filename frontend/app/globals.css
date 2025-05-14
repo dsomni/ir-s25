@@ -43,13 +43,8 @@ a {
 
 
 
+
 :root {
-  /* Matrix-inspired green palette */
-  /* --matrix-primary: #00ff41;
-  --matrix-secondary: #008f11;
-  --matrix-accent: #00ff99;
-  --matrix-dark: #003b00;
-  --matrix-light: #ccffcc; */
 
   --matrix-primary: #ff69b4;
   --matrix-secondary: #ff1493;
@@ -61,4 +56,24 @@ a {
   --text-matrix: var(--matrix-primary);
   --text-matrix-dim: var(--matrix-secondary);
   --text-matrix-bright: var(--matrix-accent);
+}
+
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--matrix-light);
+  border-radius: 4px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox scrollbar support */
+html {
+  scrollbar-color: var(--matrix-light) transparent;
+  scrollbar-width: thin;
 }
