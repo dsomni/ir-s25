@@ -1,19 +1,18 @@
-import math
 import os
 import re
 import shutil
-from collections import Counter
-import numpy as np
+
 import nltk
-from gensim.models import Word2Vec
+import numpy as np
 from annoy import AnnoyIndex
+from gensim.models import Word2Vec
 from nltk.corpus import stopwords
-from tqdm import tqdm
 
 from src.utils import from_current_file, load_json, round_float, save_json
 
 nltk.download("stopwords")
 nltk.download("punkt_tab")
+
 
 class Word2VecIndexer:
     _stop_words = set(stopwords.words("english"))
@@ -78,29 +77,27 @@ class Word2VecIndexer:
 
         self.model = Word2Vec(
             sentences=sentences,
-            min_count = 1,
+            min_count=1,
         )
         vector_size = self.model.vector_size
 
         self.doc_embeddings = {
-            doc_id: np.mean([
-                self.model.wv[word] 
-                for word in words 
-                if word in self.model.wv
-            ], axis=0) 
+            doc_id: np.mean(
+                [self.model.wv[word] for word in words if word in self.model.wv], axis=0
+            )
             for doc_id, words in enumerate(sentences)
         }
 
         # self.doc_embeddings = {}
         # for doc_id, words in tqdm(enumerate(sentences)):
         #     self.doc_embeddings[doc_id] = np.mean([
-        #         self.model.wv[word] 
-        #         for word in words 
+        #         self.model.wv[word]
+        #         for word in words
         #         if word in self.model.wv
-        #     ], axis=0) 
+        #     ], axis=0)
 
         # Build Annoy index for documents
-        self.annoy_index = AnnoyIndex(vector_size, 'angular')
+        self.annoy_index = AnnoyIndex(vector_size, "angular")
         for doc_id, embedding in self.doc_embeddings.items():
             self.annoy_index.add_item(doc_id, embedding)
         self.annoy_index.build(n_trees=1000)
@@ -115,36 +112,32 @@ class Word2VecIndexer:
         self.documents = {int(k): v for k, v in load_json(self._doc_id_path).items()}
         self.model = Word2Vec.load(self._word2vec_model_path)
         vector_size = self.model.vector_size
-        self.annoy_index = AnnoyIndex(vector_size, 'angular')
+        self.annoy_index = AnnoyIndex(vector_size, "angular")
         self.annoy_index.load(self._annoy_index_path)
 
     def find(self, query: str, top_k: int = 10) -> list:
         query_words = self._tokenize(query)
         query_vectors = [
-            self.model.wv[word] 
-            for word in query_words 
-            if word in self.model.wv
+            self.model.wv[word] for word in query_words if word in self.model.wv
         ]
-        
+
         if not query_vectors:
             return []
-            
+
         # Average word vectors for query embedding
         query_embedding = np.mean(query_vectors, axis=0)
-        
+
         # Find similar documents using Annoy
         doc_ids, distances = self.annoy_index.get_nns_by_vector(
-            query_embedding, 
-            top_k, 
-            include_distances=True
+            query_embedding, top_k, include_distances=True
         )
-        
+
         # Convert angular distances to cosine similarities
         results = []
         for doc_id, distance in zip(doc_ids, distances):
-            cosine_sim = 1 - (distance ** 2) / 2  # Convert angular distance to cosine
+            cosine_sim = 1 - (distance**2) / 2  # Convert angular distance to cosine
             results.append((doc_id, cosine_sim))
-        
+
         return [
             (self.documents[doc_id], round_float(score, 5))
             for doc_id, score in sorted(results, key=lambda x: -x[1])
