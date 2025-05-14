@@ -2,6 +2,7 @@ data/scrapped/*
 
 .vscode/*
 .idea/*
+src/har_and_cookies
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
