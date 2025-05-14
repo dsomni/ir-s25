@@ -1,5 +1,6 @@
-from src.embedding import Word2VecIndexer
+from src.embeddingV2 import BERTBallTree
 from src.indexer import Indexer
+from src.rag import RAG
 from src.spellcheck import NorvigSpellCorrector
 
 PipelineOutput = tuple[
@@ -10,7 +11,7 @@ PipelineOutput = tuple[
 class Pipeline:
     def __init__(self) -> None:
         self.indexer = Indexer()
-        self.W2Vindexer = Word2VecIndexer()
+        self.BallTree = BERTBallTree()
         self.corrector = NorvigSpellCorrector()
 
     def inverted_index(self, query: str) -> PipelineOutput:
@@ -19,14 +20,18 @@ class Pipeline:
 
         return (corrected_query, scored_docs)
 
-    def w2v(self, query: str) -> PipelineOutput:
-        corrected_query = self.corrector.spell_correction(query)
-        scored_docs = self.W2Vindexer.find(corrected_query)
-
-        return (corrected_query, scored_docs)
-
     def ball_tree(self, query: str) -> PipelineOutput:
         corrected_query = self.corrector.spell_correction(query)
-        scored_docs = self.W2Vindexer.find(corrected_query)
+        scored_docs = self.BallTree.find(corrected_query)
 
         return (corrected_query, scored_docs)
+
+
+class RAGPipeline:
+    def __init__(self) -> None:
+        self.RAG = RAG()
+        self.corrector = NorvigSpellCorrector()
+
+    def request(self, query, model, k):
+        corrected_query = self.corrector.spell_correction(query)
+        return self.RAG.generate_stream(corrected_query, model, k)
