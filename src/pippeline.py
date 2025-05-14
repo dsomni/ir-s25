@@ -24,3 +24,9 @@ class Pipeline:
         scored_docs = self.W2Vindexer.find(corrected_query)
 
         return (corrected_query, scored_docs)
+
+    def ball_tree(self, query: str) -> PipelineOutput:
+        corrected_query = self.corrector.spell_correction(query)
+        scored_docs = self.W2Vindexer.find(corrected_query)
+
+        return (corrected_query, scored_docs)
