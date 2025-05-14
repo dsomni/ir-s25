@@ -1,20 +1,24 @@
+import asyncio
 import json
 import os
+from time import time
 
-from g4f.client import Client
+from g4f.client import AsyncClient
 
 from src.embeddingV2 import BERTBallTree
-from utils import load
+from src.utils import load
 
 
 class RAG:
     folder_path = "../data/scrapped/class_data_function__1_1"
 
     def __init__(self):
-        self.client = Client()
+        self.client = AsyncClient()
         self.ball_tree = BERTBallTree()
+        self.timeout: float = (60.0,)
 
     def generate_stream(self, question: str, model: str, k: int = 10):
+        start = time()
         res, context = self._retrive_docs(question, k)
         prompt = (
             "You're a Python expert. Suppose all the documentation information you know is provided in context section. "
@@ -44,12 +48,15 @@ class RAG:
         )
 
         try:
-            response = self.client.chat.completions.create(
-                model=model,
-                messages=messages,
-                stream=True,
-                verbose=False,
-                max_tokens=500,
+            response = asyncio.wait_for(
+                self.client.chat.completions.create(
+                    model=model,
+                    messages=messages,
+                    stream=True,
+                    verbose=False,
+                    max_tokens=500,
+                ),
+                timeout=self.timeout,
             )
 
             for chunk in response:
@@ -63,7 +70,9 @@ class RAG:
         except BaseException as e:
             yield json.dumps({"type": "error", "data": str(e)}) + "\n\n"
 
-        yield json.dumps({"type": "complete", "data": {"elapsed": time}}) + "\n\n"
+        yield (
+            json.dumps({"type": "complete", "data": {"elapsed": time() - start}}) + "\n\n"
+        )
 
     def _retrive_docs(self, query_m: str, k):
         results, distances = self.ball_tree.find(query_m, k, return_distances=True)

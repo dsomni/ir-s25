@@ -6,7 +6,7 @@ from sklearn.neighbors import BallTree
 from tqdm import tqdm
 from transformers import AutoModel, AutoTokenizer
 
-from utils import from_current_file
+from src.utils import from_current_file
 
 
 class BERTEmbedder:
