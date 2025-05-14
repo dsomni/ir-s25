@@ -5,14 +5,16 @@ import uvicorn
 from dotenv import dotenv_values
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
-from src.pippeline import Pipeline
+from src.pippeline import Pipeline, RAGPipeline
 from src.utils import load, parse_document_content
 
 DATA_PATH = os.path.join("./data/scrapped/class_data_function__1_1")
 CONFIG = dotenv_values(".env")
 
 PIPELINE = Pipeline()
+RAG_PIPELINE = RAGPipeline()
 
 app = FastAPI()
 
@@ -37,8 +39,8 @@ app.add_middleware(
 
 @app.get("/search")
 async def search(query: str, indexer: str):
-    if indexer == "word2vec":
-        corrected_query, proposals = PIPELINE.w2v(query)
+    if indexer == "bert":
+        corrected_query, proposals = PIPELINE.ball_tree(query)
     elif indexer == "inverted_idx":
         corrected_query, proposals = PIPELINE.inverted_index(query)
     else:
@@ -69,21 +71,19 @@ async def document_page(name: str):
 
 @app.get("/models")
 async def get_llm_list():
-    return ["model1", "model2", "model3"]
+    return [
+        "qwen-2-72b",
+        "evil",
+        "command-r",
+    ]
 
 
 @app.get("/chat")
 async def chat(prompt: str, k: int, model: str):
-    if k == 1:
-        raise FileExistsError
-    return {
-        "answer": f"{prompt} {k} {model}" * 10,
-        "error": "",
-        "proposals": [
-            {"document": doc, "score": score}
-            for doc, score in [(model, i) for i in range(k)]
-        ],
-    }
+    return StreamingResponse(
+        RAG_PIPELINE.request(prompt, model, k),
+        media_type="text/event-stream",
+    )
 
 
 if __name__ == "__main__":

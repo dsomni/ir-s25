@@ -11,7 +11,7 @@ interface Proposal {
 }
 
 const indexerOptions = [
-  { value: 'word2vec', label: 'Word2Vec' },
+  { value: 'bert', label: 'LLM + BallTree' },
   { value: 'inverted_idx', label: 'Inverted Index' },
 ];
 
@@ -19,7 +19,7 @@ export default function Search() {
   const [query, setQuery] = useState("");
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [correctedQuery, setCorrectedQuery] = useState<string | null>(null);
-  const [indexerType, setIndexerType] = useState<string>('word2vec');
+  const [indexerType, setIndexerType] = useState<string>('bert');
   const [isSearching, setIsSearching] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 

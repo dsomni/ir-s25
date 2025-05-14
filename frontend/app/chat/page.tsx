@@ -65,30 +65,60 @@ export default function ChatPage() {
         setError("");
         const currentPrompt = prompt;
         setPrompt("");
+        let current = "";
 
         try {
-            const response = await axios.get(
+            const response = await fetch(
                 `${process.env.API_URL}/chat?prompt=${encodeURIComponent(currentPrompt)}&k=${kValue}&model=${model}`
             );
 
-            // const errorMsg = response.data.error;
-            setError(response.data.error);
-            const fullAnswer = response.data.answer;
-            setProposals(response.data.proposals);
-
-            // Simulate word-by-word typing
-            let current = "";
-            const words = fullAnswer.split(" ");
-            for (let i = 0; i < words.length; i++) {
-                current += words[i] + " ";
-                await new Promise(resolve => setTimeout(resolve, 50));
-                setStreamingResponse(current);
+            if (!response.ok || !response.body) {
+                throw new Error("Failed to connect to backend or response body is missing.");
             }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const chunk = decoder.decode(value, { stream: true });
+                const messages = chunk.split('\n\n').filter(m => m.trim() !== '');
+                console.log(messages)
+                for (const message of messages) {
+                    try {
+                        const parsed = JSON.parse(message);
+
+                        switch (parsed.type) {
+                            case 'proposals':
+                                setProposals(parsed.data);
+                                break;
+                            case 'chunk':
+                                current += parsed.data;
+                                setStreamingResponse(current);
+                                break;
+                            case 'complete':
+                                setStreamingResponse("");
+                                break;
+                            case 'error':
+                                setError(parsed.data || "Unknown error");
+                                return;
+                            default:
+                                console.warn('Unknown message type:', parsed.type);
+                        }
+                    } catch (e) {
+                        console.error('Error parsing message:', e);
+                        return;
+                    }
+                }
+            }
+
             setStreamingResponse("");
-            setMessages(prev => [...prev, { role: "model", content: fullAnswer }]);
+            setMessages(prev => [...prev, { role: "model", content: current }]);
         } catch (err) {
             console.error("Error during chat request:", err);
-            setError("Error: " + (err || "Failed to contact backend."));
+            setError("Error: " + (err instanceof Error ? err.message : "Unknown error"));
         }
     };
 

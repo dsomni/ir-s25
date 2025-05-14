@@ -1,10 +1,11 @@
 import os
 import shutil
 
+import joblib
 import torch
 from sklearn.neighbors import BallTree
 from tqdm import tqdm
-from transformers import AutoModel, AutoTokenizer
+from transformers import AutoModel, AutoTokenizer  # type: ignore
 
 from src.utils import from_current_file
 
@@ -75,7 +76,6 @@ class BERTBallTree:
         self.embedder = BERTEmbedder()
         self.metric = metric
         self.leaf_size = leaf_size
-        self.tree = None
         self.tree_name = tree_name
         self.documents: dict[int, str] = {}
 
@@ -112,7 +112,7 @@ class BERTBallTree:
         self.tree = BallTree(embeddings, metric=self.metric, leaf_size=self.leaf_size)
         self.save_tree()
 
-    def find(self, query_text, k=10, return_distances=True):
+    def find(self, query_text, k=10) -> list[tuple[str, float]]:
         """
         Query the Ball Tree for nearest neighbors.
 
@@ -135,16 +135,13 @@ class BERTBallTree:
 
         # Get the corresponding texts
         results = []
-        for indice in indices[0]:
-            results.append(self.documents[indice])
+        for index in indices[0]:
+            results.append(self.documents[index])
 
-        if return_distances:
-            return results, distances[0]
-        return results
+        return list(zip(results, distances[0]))
 
     def save_tree(self):
         """Save the Ball Tree and associated data to disk."""
-        import joblib
 
         data = {
             "tree": self.tree,
@@ -154,7 +151,6 @@ class BERTBallTree:
 
     def load_tree(self):
         """Load a saved Ball Tree from disk."""
-        import joblib
 
         data = joblib.load(os.path.join(self._index_dir, self.tree_name))
         self.tree = data["tree"]

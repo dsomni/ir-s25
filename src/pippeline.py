@@ -11,7 +11,7 @@ PipelineOutput = tuple[
 class Pipeline:
     def __init__(self) -> None:
         self.indexer = Indexer()
-        self.BallTree = BERTBallTree()
+        self.bt_indexer = BERTBallTree()
         self.corrector = NorvigSpellCorrector()
 
     def inverted_index(self, query: str) -> PipelineOutput:
@@ -22,16 +22,16 @@ class Pipeline:
 
     def ball_tree(self, query: str) -> PipelineOutput:
         corrected_query = self.corrector.spell_correction(query)
-        scored_docs = self.BallTree.find(corrected_query)
+        scored_docs = self.bt_indexer.find(corrected_query)
 
         return (corrected_query, scored_docs)
 
 
 class RAGPipeline:
     def __init__(self) -> None:
-        self.RAG = RAG()
+        self.rag = RAG()
         self.corrector = NorvigSpellCorrector()
 
     def request(self, query, model, k):
         corrected_query = self.corrector.spell_correction(query)
-        return self.RAG.generate_stream(corrected_query, model, k)
+        return self.rag.generate_stream(corrected_query, model, k)
