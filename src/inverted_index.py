@@ -5,13 +5,9 @@ import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
 
-import nltk
 from nltk.corpus import stopwords
 
 from src.utils import from_current_file, load_json, round_float, save_json
-
-nltk.download("stopwords")
-nltk.download("punkt_tab")
 
 
 def compute_levenshtein_distance(w1: str, w2: str) -> int:

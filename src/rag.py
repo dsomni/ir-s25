@@ -107,10 +107,7 @@ class RetrievalAugmentedGeneration:
         except BaseException as e:
             yield json.dumps({"type": "error", "data": str(e)}) + "\n\n"
 
-        yield (
-            json.dumps({"type": "complete", "data": {"elapsed": time.time() - start}})
-            + "\n\n"
-        )
+        yield (json.dumps({"type": "complete", "data": time.time() - start}) + "\n\n")
 
     def _retrieve_docs(self, source_names: list[str]) -> list[str]:
         contents = []

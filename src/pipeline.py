@@ -1,7 +1,7 @@
 import typing
 
-from bert_indexer import BERTBallTree
-from inverted_index import InvertedIndex
+from src.bert_indexer import BERTBallTree
+from src.inverted_index import InvertedIndex
 from src.rag import RetrievalAugmentedGeneration
 from src.spellcheck import NorvigSpellCorrector
 

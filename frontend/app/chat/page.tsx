@@ -6,13 +6,10 @@ import axios from "axios";
 import { useRef } from "react";
 import Dropdown from '@/components/Dropdown';
 import BackLink from "@/components/BackLink";
+import { indexerMap, Proposal, THINK_REGEX } from "@/constants";
 
 
-interface Proposal {
-    document: string;
-    score: number;
-}
-const THINK_REGEX = /<think>.*?<\/think>/gs;
+
 
 export default function ChatPage() {
     const [prompt, setPrompt] = useState("");
@@ -21,7 +18,9 @@ export default function ChatPage() {
     const [showValues, setShowValues] = useState(false);
     const [model, setModel] = useState("");
     const [modelList, setModelList] = useState<string[]>([]);
-    const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
+    const [indexer, setIndexer] = useState("");
+    const [indexerList, setIndexerList] = useState<string[]>([]);
+    const [messages, setMessages] = useState<{ role: string; content: string; time: number | undefined }[]>([]);
     const [streamingResponse, setStreamingResponse] = useState("");
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -50,10 +49,22 @@ export default function ChatPage() {
                 if (response.data.length > 0) setModel(response.data[0]); // default to first
             } catch (err) {
                 console.error("Failed to fetch models", err);
-                setError("Unable to load model list.");
+                setError("Unable to load model list");
+            }
+        };
+        const fetchIndexers = async () => {
+            try {
+                const response = await axios.get(`${process.env.API_URL}/indexers`);
+                setIndexerList(response.data || []);
+                if (response.data.length > 0) setIndexer(response.data[0]); // default to first
+            } catch (err) {
+                console.error("Failed to fetch indexers", err);
+                setError("Unable to load indexer list");
             }
         };
 
+
+        fetchIndexers();
         fetchModels();
     }, []);
 
@@ -63,7 +74,7 @@ export default function ChatPage() {
         setIsLoading(true);
 
         // Append user message
-        setMessages(prev => [...prev, { role: "user", content: prompt }]);
+        setMessages(prev => [...prev, { role: "user", content: prompt, time: undefined }]);
         setStreamingResponse("");
         setError("");
         const currentPrompt = prompt;
@@ -73,7 +84,7 @@ export default function ChatPage() {
         try {
             const currentModel = model;
             const response = await fetch(
-                `${process.env.API_URL}/chat?prompt=${encodeURIComponent(currentPrompt)}&k=${kValue}&model=${model}`
+                `${process.env.API_URL}/chat?prompt=${encodeURIComponent(currentPrompt)}&k=${kValue}&model=${model}&indexer=${indexer}`,
             );
 
             if (!response.ok || !response.body) {
@@ -82,6 +93,8 @@ export default function ChatPage() {
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
+
+            let elapsedTime: number | undefined = undefined
 
             while (true) {
                 const { done, value } = await reader.read();
@@ -104,6 +117,7 @@ export default function ChatPage() {
                                 break;
                             case 'complete':
                                 setStreamingResponse("");
+                                elapsedTime = parsed.data
                                 break;
                             case 'error':
                                 setError(parsed.data || "Unknown error");
@@ -119,9 +133,8 @@ export default function ChatPage() {
                     }
                 }
             }
-
             setStreamingResponse("");
-            setMessages(prev => [...prev, { role: currentModel, content: current.replace(THINK_REGEX, '').trim() }]);
+            setMessages(prev => [...prev, { role: currentModel, content: current.replace(THINK_REGEX, '').trim(), time: elapsedTime }]);
         } catch (err) {
             console.error("Error during chat request:", err);
             setError("Error: " + (err instanceof Error ? err.message : "Unknown error"));
@@ -146,6 +159,11 @@ export default function ChatPage() {
                     value={model}
                     onChange={(newValue) => setModel(newValue)}
                 />
+                <Dropdown
+                    options={indexerList.map(value => ({ value: value, label: indexerMap.get(value)! }))}
+                    value={indexer}
+                    onChange={(newValue) => setIndexer(newValue)}
+                />
 
             </div>
 
@@ -154,6 +172,7 @@ export default function ChatPage() {
                     <div key={idx} className={msg.role === "user" ? styles.userMsg : styles.modelMsg}>
                         <div className={styles.role}><strong>{msg.role === "user" ? "YOU" : msg.role.toUpperCase()}</strong></div>
                         <div>{msg.content}</div>
+                        {msg.time && <div className={styles.time}>{msg.time.toFixed(2)} seconds</div>}
                     </div>
                 ))}
 
@@ -213,6 +232,7 @@ export default function ChatPage() {
                                 <a
                                     href={`doc/${item.document}`}
                                     className={styles.document}
+                                    target="_blank"
                                 >
                                     {item.document}
                                 </a>

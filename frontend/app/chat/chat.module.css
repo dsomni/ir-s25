@@ -263,3 +263,11 @@
     gap: 0.2rem;
     flex-wrap: wrap;
 }
+
+.time {
+    font-size: 0.6rem;
+    color: var(--text-matrix-bright);
+    opacity: 0.7;
+    font-style: italic;
+    margin-top: 0.25rem;
+}

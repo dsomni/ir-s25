@@ -2,16 +2,12 @@ import os
 import re
 import shutil
 
-import nltk
 import numpy as np
 from annoy import AnnoyIndex
 from gensim.models import Word2Vec
 from nltk.corpus import stopwords
 
 from src.utils import from_current_file, load_json, round_float, save_json
-
-nltk.download("stopwords")
-nltk.download("punkt_tab")
 
 
 class Word2VecIndexer:

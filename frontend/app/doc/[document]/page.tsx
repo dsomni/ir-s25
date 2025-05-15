@@ -3,10 +3,10 @@
 import axios from "axios";
 import { notFound } from "next/navigation";
 import styles from './DocumentPage.module.css';
-import dynamic from 'next/dynamic';
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { use } from "react";
+import { useRouter } from "next/navigation";
 
 async function fetchDocument(documentName: string) {
     try {
@@ -27,6 +27,7 @@ export default function DocumentPage({
     params: Promise<{ document: string }>;
 }) {
     // Unwrap the params Promise
+    const router = useRouter();
     const { document: documentName } = use(params);
     const [document, setDocument] = useState<{
         name: string;
@@ -62,7 +63,6 @@ export default function DocumentPage({
     if (loading) {
         return (
             <div className={styles.container}>
-                <MatrixBackground />
                 <div className={styles.loading}>Loading document...</div>
             </div>
         );
@@ -71,7 +71,6 @@ export default function DocumentPage({
     if (error || !document) {
         return (
             <div className={styles.container}>
-                <MatrixBackground />
                 <div className={styles.error}>
                     {error || "Document not found"}
                     <div className={styles.backLink}>
@@ -112,14 +111,9 @@ export default function DocumentPage({
                 </div>}
 
                 <div className={styles.backLink}>
-                    <Link href="/search">← Back to Search</Link>
+                    <Link onClick={() => router.back()} href="/search">← Back to Search</Link>
                 </div>
             </div>
         </div>
     );
 }
-
-const MatrixBackground = dynamic(
-    () => import('@/components/MatrixBackground'),
-    { ssr: false }
-);

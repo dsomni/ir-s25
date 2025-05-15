@@ -5,23 +5,34 @@ import axios from "axios";
 import styles from "./search.module.css";
 import Dropdown from '@/components/Dropdown';
 import BackLink from "@/components/BackLink";
-interface Proposal {
-  document: string;
-  score: number;
-}
-
-const indexerOptions = [
-  { value: 'bert', label: 'LLM + BallTree' },
-  { value: 'inverted_idx', label: 'Inverted Index' },
-];
+import { indexerMap, Proposal } from "@/constants";
 
 export default function Search() {
   const [query, setQuery] = useState("");
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [correctedQuery, setCorrectedQuery] = useState<string | null>(null);
-  const [indexerType, setIndexerType] = useState<string>('bert');
+  const [error, setError] = useState("");
+
+  const [indexer, setIndexer] = useState("");
+  const [indexerList, setIndexerList] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+
+  useEffect(() => {
+    const fetchIndexers = async () => {
+      try {
+        const response = await axios.get(`${process.env.API_URL}/indexers`);
+        setIndexerList(response.data || []);
+        if (response.data.length > 0) setIndexer(response.data[0]); // default to first
+      } catch (err) {
+        console.error("Failed to fetch indexers", err);
+        setError("Unable to load indexer list");
+      }
+    };
+
+    fetchIndexers();
+  }, []);
 
   const performSearch = useCallback(async (searchQuery: string, searchIndexer: string) => {
     if (!searchQuery) {
@@ -40,6 +51,7 @@ export default function Search() {
       setProposals(response.data.proposals);
     } catch (error) {
       console.error("Error fetching proposals:", error);
+      setError("Error fetching proposals: " + error);
     } finally {
       setIsSearching(false);
     }
@@ -56,13 +68,13 @@ export default function Search() {
 
     // Set new timeout
     searchTimeoutRef.current = setTimeout(() => {
-      performSearch(newQuery, indexerType);
+      performSearch(newQuery, indexer);
     }, 500);
-  }, [indexerType, performSearch]);
+  }, [indexer, performSearch]);
 
   // Handle indexer type changes
   const handleIndexerChange = useCallback((newIndexer: string) => {
-    setIndexerType(newIndexer);
+    setIndexer(newIndexer);
     // Perform search immediately when indexer changes
     if (query) {
       // Clear any pending debounced search
@@ -89,8 +101,8 @@ export default function Search() {
 
       <div className={styles.searchRow}>
         <Dropdown
-          options={indexerOptions}
-          value={indexerType}
+          options={indexerList.map(value => ({ value: value, label: indexerMap.get(value)! }))}
+          value={indexer}
           onChange={handleIndexerChange}
         />
         <input
@@ -102,6 +114,9 @@ export default function Search() {
         />
         {isSearching && <span className={styles.searchIndicator}>...</span>}
       </div>
+
+
+      {error && <div className={styles.error}>{error}</div>}
 
       {correctedQuery && correctedQuery != query && (
         <div className={styles.corrected}>
@@ -115,6 +130,8 @@ export default function Search() {
             <a
               href={`doc/${item.document}`}
               className={styles.document}
+              target="_blank"
+
             >
               {item.document}
             </a>
