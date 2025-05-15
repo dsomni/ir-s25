@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-from g4f.client import AsyncClient
+from g4f.client import AsyncClient, Client
 
 from src.utils import from_current_file, load
 
@@ -21,6 +21,7 @@ def get_prompt(query: str, sources: list[str]) -> str:
         "3. If the question is unrelated to Python:\n"
         '   - Respond: "Question is unrelated."\n\n'
         "4. Strict Prohibitions:\n"
+        "   - No Python code examples.\n"
         "   - No repetition of the prompt.\n"
         "   - No extra explanations beyond the context.\n"
         "   - No unsourced information.\n\n"
@@ -42,6 +43,7 @@ class RetrievalAugmentedGeneration:
 
     def __init__(self):
         self.client = AsyncClient()
+        self.sync_client = Client()
 
     def generate_stream(
         self, query: str, model: str, scored_docs: list[tuple[str, float]]
@@ -108,6 +110,22 @@ class RetrievalAugmentedGeneration:
             yield json.dumps({"type": "error", "data": str(e)}) + "\n\n"
 
         yield (json.dumps({"type": "complete", "data": time.time() - start}) + "\n\n")
+
+    def get_answer(
+        self, query: str, model: str, scored_docs: list[tuple[str, float]]
+    ) -> tuple[str, str]:
+        source_names = [x for x, _ in scored_docs]
+        sources = self._retrieve_docs(source_names)
+        prompt = get_prompt(query, sources)
+        messages = [{"role": "user", "content": prompt}]
+
+        try:
+            response = self.sync_client.chat.completions.create(
+                model=model, messages=messages, web_search=False, stream=False
+            )
+            return response.choices[0].message.content, ""
+        except BaseException as e:
+            return "", str(e)
 
     def _retrieve_docs(self, source_names: list[str]) -> list[str]:
         contents = []
