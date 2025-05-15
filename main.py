@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from src.pipeline import ApiModel, Indexer, IndexerPipeline, RAGPipeline
+from src.pipeline import ApiModel, Indexer, IndexerPipeline, LocalModel, RAGPipeline
 from src.scrapper import scrap
 from src.utils import load, parse_document_content
 
@@ -83,7 +83,7 @@ async def get_llm_list():
 
 
 @app.get("/chat")
-async def chat(prompt: str, k: int, model: ApiModel, indexer: Indexer):
+async def chat(prompt: str, k: int, model: ApiModel | LocalModel, indexer: Indexer):
     return StreamingResponse(
         RAG_PIPELINE.request(prompt, model, k, indexer),
         media_type="text/event-stream",
