@@ -107,8 +107,10 @@ Key Features:
 
 We build a classical inverted index on the scraped documentation:
 
-- K-grams tokenizer: Splits text into overlapping k-character sequences to 
-support fuzzy matching and fast lookups.
+- Preprocessing: Documents are tokenized, lowercased, and stripped of 
+punctuation. Common stopwords removed.
+- Index construction: For each term, we maintain a postings 
+list containing the document IDs and term frequencies.
 
 - TF-IDF weighting: Assigns higher scores to terms that are important within 
 a document but rare across the corpus.
@@ -124,7 +126,7 @@ To capture semantic similarity, we use embeddings:
 - Embedding extraction: We use a pre-trained LLM embedding endpoint to
 convert each documentation section into a fixed-length vector.
 
-- Ball Tree index: All embeddings are stored in a Ball Tree structure 
+- Ball Tree searcher: All embeddings are stored in a Ball Tree structure 
 for efficient nearest-neighbor search in high-dimensional space.
 
 - Query embeddings: A user's natural language query is embedded using
