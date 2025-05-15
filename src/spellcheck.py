@@ -4,14 +4,10 @@ import string
 from collections import Counter, defaultdict
 from pathlib import Path
 
-import nltk
 from nltk.corpus import stopwords
 from tqdm import tqdm
 
 from src.utils import from_current_file, load_json, save_json
-
-nltk.download("stopwords")
-nltk.download("punkt_tab")
 
 
 class NorvigSpellCorrector:
@@ -20,16 +16,18 @@ class NorvigSpellCorrector:
 
     def __init__(
         self,
-        spell_dir: str = "../data/spell_directory",
-        documents_dir: str = "../data/scrapped/class_data_function__1_1",
+        spell_dir: Path = from_current_file("../data/spell_directory"),
+        documents_dir: Path = from_current_file(
+            "../data/scrapped/class_data_function__1_1"
+        ),
         max_edits: int = 2,
         save_distances: bool = False,
     ):
         self._max_edits = max_edits
         self.save_distances = save_distances
 
-        self._spell_dir = from_current_file(spell_dir)
-        self._documents_dir = from_current_file(documents_dir)
+        self._spell_dir = spell_dir
+        self._documents_dir = documents_dir
 
         self._counter_path = os.path.join(self._spell_dir, "counter.json")
         self._settings_path = os.path.join(self._spell_dir, "settings.json")
@@ -146,7 +144,7 @@ class NorvigSpellCorrector:
             return word
         return max(self.word_candidates(word), key=self.word_probability)
 
-    def spell_correction(self, text: str) -> str:
+    def spell_correction(self, text: str, skip_stop_words: bool = False) -> str:
         tokens = self.tokenize(text.lower())
         if len(tokens) == 1:
             return self.spell_correction_word(tokens[0])
@@ -158,6 +156,9 @@ class NorvigSpellCorrector:
                 corrected = corrected + token + " "
                 continue
             if token in self._stop_words:
+                if skip_stop_words:
+                    continue
+                corrected = corrected + token + " "
                 continue
             corrected = corrected + self.spell_correction_word(token) + " "
         return corrected.strip()

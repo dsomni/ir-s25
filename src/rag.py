@@ -5,45 +5,59 @@ import time
 
 from g4f.client import AsyncClient
 
-from src.embeddingV2 import BERTBallTree
 from src.utils import from_current_file, load
 
 
-class RAG:
+def get_prompt(query: str, sources: list[str]) -> str:
+    return (
+        "### Role\n"
+        "You are a Python documentation assistant. Your knowledge is strictly limited to the provided context.\n\n"
+        "### Instructions\n"
+        "1. Answer Requirements:\n"
+        "   - Provide a concise answer based only on the context.\n"
+        "   - End your response with: `References: [X, Y]` (document indices where the answer is found).\n\n"
+        "2. If the answer is missing:\n"
+        '   - Say: "I can\'t find the answer in the Python documentation."\n\n'
+        "3. If the question is unrelated to Python:\n"
+        '   - Respond: "Question is unrelated."\n\n'
+        "4. Strict Prohibitions:\n"
+        "   - No repetition of the prompt.\n"
+        "   - No extra explanations beyond the context.\n"
+        "   - No unsourced information.\n\n"
+        "5. Citations:\n"
+        '   - Highlight key phrases only from the context (or use "show sources" if needed).\n\n'
+        "### Context\n"
+        f"{'\n\n'.join([f'{idx + 1}. {c}' for idx, c in enumerate(sources)])}\n\n"
+        "### Question\n"
+        f"{query}\n\n"
+        "### Response Format\n"
+        "[Your answer here.]\n"
+        "References: [X, Y]"
+    )
+
+
+class RetrievalAugmentedGeneration:
     folder_path = from_current_file("../data/scrapped/class_data_function__1_1")
+    response_timeout_seconds: float = 30.0
 
     def __init__(self):
         self.client = AsyncClient()
-        self.ball_tree = BERTBallTree()
-        self.timeout: float = 30.0
 
     def generate_stream(
-        self, question: str, corrected_query: str, model: str, k: int = 10
+        self, query: str, model: str, scored_docs: list[tuple[str, float]]
     ):
         start = time.time()
-        docs_scores, context = self._retrieve_docs(corrected_query, k)
-        prompt = (
-            "You're a Python expert. Suppose all the documentation information you know is provided in context section. "
-            "Answer on the question as usual but take technical information only from context. "
-            'If there is no answer in the context, say, "I can\'t find the answer in the Python documentation"\n'
-            "Highlight cited passages or provide 'show sources' toggles ONLY FROM CONTEXT\n"
-            "NO PYTHON CODE EXAMPLES!\n"
-            "NO PROMPT REPETITION IN ANSWER!\n"
-            "NO EXAMPLES!\n"
-            "NO ADDITIONAL EXPLANATIONS!\n"
-            'If question is unrealated to python documentation, just answer "Question is unrelated"\n'
-            "\nContext:\n"
-            f"{'\n\n'.join([f'{idx + 1}. {c}' for idx, c in enumerate(context)])}\n"
-            f"\nQuestion: {question}\n"
-            f"\nResponse (with reference to the source [1-{k}]):\n"
-        )
+        source_names = [x for x, _ in scored_docs]
+        sources = self._retrieve_docs(source_names)
+
+        prompt = get_prompt(query, sources)
         messages = [{"role": "user", "content": prompt, "additional_data": []}]
 
         yield (
             json.dumps(
                 {
                     "type": "proposals",
-                    "data": [{"document": x[0], "score": x[1]} for x in docs_scores],
+                    "data": [{"document": x[0], "score": x[1]} for x in scored_docs],
                 }
             )
             + "\n\n"
@@ -63,11 +77,14 @@ class RAG:
             )
 
             delay = 0.05
-            max_iters = int(self.timeout // delay)
+            max_iters = int(self.response_timeout_seconds // delay)
             try:
                 for _ in range(max_iters):
                     chunk = loop.run_until_complete(
-                        asyncio.wait_for(response.__anext__(), timeout=self.timeout)  # type: ignore
+                        asyncio.wait_for(
+                            response.__anext__(),  # type: ignore
+                            timeout=self.response_timeout_seconds,
+                        )
                     )
 
                     if chunk.choices[0].delta.content:
@@ -95,14 +112,12 @@ class RAG:
             + "\n\n"
         )
 
-    def _retrieve_docs(self, query_m: str, k):
-        docs_scores = self.ball_tree.find(query_m, k=k)
-
+    def _retrieve_docs(self, source_names: list[str]) -> list[str]:
         contents = []
 
-        for name, _ in docs_scores:
+        for name in source_names:
             content = load(os.path.join(self.folder_path, name + ".txt"))
 
             contents.append(name + "\n" + content)
 
-        return docs_scores, contents
+        return contents

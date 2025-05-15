@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 from collections import Counter, defaultdict
+from pathlib import Path
 
 import nltk
 from nltk.corpus import stopwords
@@ -35,18 +36,20 @@ def compute_levenshtein_distance(w1: str, w2: str) -> int:
     return previous_row[-1]
 
 
-class Indexer:
+class InvertedIndex:
     _stop_words = set(stopwords.words("english"))
 
     def __init__(
         self,
-        index_dir: str = "../data/index_directory",
-        documents_dir: str = "../data/scrapped/class_data_function__1_1",
+        index_dir: Path = from_current_file("../data/index_directory"),
+        documents_dir: Path = from_current_file(
+            "../data/scrapped/class_data_function__1_1"
+        ),
         max_distance: int = 3,
         force: bool = False,
     ):
-        self._index_dir = from_current_file(index_dir)
-        self._documents_dir = from_current_file(documents_dir)
+        self._index_dir = index_dir
+        self._documents_dir = documents_dir
         self.max_distance = max_distance
 
         self._index_path = os.path.join(self._index_dir, "index.json")
@@ -117,7 +120,7 @@ class Indexer:
             int(k): v for k, v in load_json(self._doc_len_path).items()
         }
 
-    def find(self, query: str, top_k: int = 10) -> list:
+    def find(self, query: str, k: int = 10) -> list:
         query_words = self._tokenize(query)
         document_scores = Counter()
         total_documents = len(self.documents)
@@ -137,7 +140,7 @@ class Indexer:
                         )
                         document_scores[doc_id] += tf * idf * distance_coef  # type: ignore
 
-        ranked_docs = sorted(document_scores.items(), key=lambda x: -x[1])[:top_k]
+        ranked_docs = sorted(document_scores.items(), key=lambda x: -x[1])[:k]
         return [
             (self.documents[doc_id], round_float(score, 5))
             for doc_id, score in ranked_docs
