@@ -6,7 +6,7 @@ import nltk
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
-from src.bert_indexer import BERTBallTree
+from llm_indexer import LlmTreeIndexer
 from src.inverted_index import InvertedIndex
 from src.scrapper import ModulesIndex, ModulesScrapper
 from src.spellcheck import NorvigSpellCorrector
@@ -37,10 +37,10 @@ def setup_project(force: bool, skip_scrap: bool):
     InvertedIndex()
     print("Successfully built Inverted Index!\n")
 
-    # Setup BERT BallTree
-    print("Building BERT BallTree...")
-    BERTBallTree()
-    print("Successfully built BERT BallTree!\n")
+    # Setup LLM Tree
+    print("Building LLM Tree...")
+    LlmTreeIndexer()
+    print("Successfully built LLM Tree!\n")
 
     print("Done!")
 

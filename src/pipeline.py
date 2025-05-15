@@ -1,7 +1,7 @@
 import typing
 
-from src.bert_indexer import BERTBallTree
 from src.inverted_index import InvertedIndex
+from src.llm_indexer import LlmTreeIndexer
 from src.rag import RetrievalAugmentedGeneration
 from src.spellcheck import NorvigSpellCorrector
 
@@ -23,7 +23,7 @@ ApiModel = typing.Literal[
     "command-r",
 ]
 
-Indexer = typing.Literal["bert", "inverted_idx"]
+Indexer = typing.Literal["llm_tree_idx", "inverted_idx"]
 
 
 class IndexerPipeline:
@@ -31,13 +31,13 @@ class IndexerPipeline:
 
     def __init__(self) -> None:
         self.indexer = InvertedIndex()
-        self.bt_indexer = BERTBallTree()
+        self.llm_indexer = LlmTreeIndexer()
         self.corrector = NorvigSpellCorrector()
 
     def index(self, query: str, indexer: Indexer, k: int = 10) -> PipelineOutput:
         corrected_query = self.corrector.spell_correction(query)
-        if indexer == "bert":
-            scored_docs = self.bt_indexer.find(corrected_query, k=k)
+        if indexer == "llm_tree_idx":
+            scored_docs = self.llm_indexer.find(corrected_query, k=k)
         elif indexer == "inverted_idx":
             scored_docs = self.indexer.find(corrected_query, k=k)
         else:

@@ -1,5 +1,5 @@
 export const indexerMap: Map<string, string> = new Map<string, string>([
-  ["bert", "LLM + BallTree"],
+  ["llm_tree_idx", "LLM + Tree"],
   ["inverted_idx", "Inverted Index"],
 ]);
 
