@@ -12,6 +12,7 @@ interface Proposal {
     document: string;
     score: number;
 }
+const THINK_REGEX = /<think>.*?<\/think>/gs;
 
 export default function ChatPage() {
     const [prompt, setPrompt] = useState("");
@@ -68,6 +69,7 @@ export default function ChatPage() {
         let current = "";
 
         try {
+            const currentModel = model;
             const response = await fetch(
                 `${process.env.API_URL}/chat?prompt=${encodeURIComponent(currentPrompt)}&k=${kValue}&model=${model}`
             );
@@ -115,7 +117,7 @@ export default function ChatPage() {
             }
 
             setStreamingResponse("");
-            setMessages(prev => [...prev, { role: "model", content: current }]);
+            setMessages(prev => [...prev, { role: currentModel, content: current.replace(THINK_REGEX, '').trim() }]);
         } catch (err) {
             console.error("Error during chat request:", err);
             setError("Error: " + (err instanceof Error ? err.message : "Unknown error"));
@@ -144,7 +146,7 @@ export default function ChatPage() {
             <div className={styles.chatBox}>
                 {messages.map((msg, idx) => (
                     <div key={idx} className={msg.role === "user" ? styles.userMsg : styles.modelMsg}>
-                        <div className={styles.role}><strong>{msg.role === "user" ? "YOU" : model.toUpperCase()}</strong></div>
+                        <div className={styles.role}><strong>{msg.role === "user" ? "YOU" : msg.role.toUpperCase()}</strong></div>
                         <div>{msg.content}</div>
                     </div>
                 ))}
@@ -188,19 +190,21 @@ export default function ChatPage() {
                         onClick={() => setShowValues((prev) => !prev)}
                         className={styles.toggleButton}
                     >
-                        {showValues ? "Hide" : "Show last proposals"}
+                        {showValues ? "Hide" : "Show References"}
                     </button>
 
                     {showValues && <div className={styles.results}>
                         {proposals.map((item, index) => (
                             <div key={index} className={styles.resultItem}>
+                                <span>[{index + 1}]</span>
+
                                 <a
                                     href={`doc/${item.document}`}
                                     className={styles.document}
                                 >
                                     {item.document}
                                 </a>
-                                <span className={styles.score}> (score: {item.score.toFixed(2)})</span>
+                                <span className={styles.score}>(score: {item.score.toFixed(2)})</span>
                             </div>
                         ))}
                     </div>}

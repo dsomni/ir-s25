@@ -158,7 +158,6 @@ class NorvigSpellCorrector:
                 corrected = corrected + token + " "
                 continue
             if token in self._stop_words:
-                corrected = corrected + token + " "
                 continue
             corrected = corrected + self.spell_correction_word(token) + " "
         return corrected.strip()

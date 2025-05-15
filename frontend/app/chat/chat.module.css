@@ -154,6 +154,7 @@
 .results {
     margin-top: 1rem;
     position: relative;
+
 }
 
 .resultItem {
@@ -162,6 +163,10 @@
     border-left: 2px solid var(--matrix-primary);
     transition: all 0.3s ease;
     background: rgba(0, 255, 65, 0.05);
+    display: flex;
+    flex-direction: row;
+    gap: 0.7rem;
+    align-items: center;
 }
 
 .resultItem:hover {

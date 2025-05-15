@@ -34,4 +34,4 @@ class RAGPipeline:
 
     def request(self, query, model, k):
         corrected_query = self.corrector.spell_correction(query)
-        return self.rag.generate_stream(corrected_query, model, k)
+        return self.rag.generate_stream(query, corrected_query, model, k)

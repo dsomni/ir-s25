@@ -1,7 +1,7 @@
 import asyncio
 import json
 import os
-from time import time
+import time
 
 from g4f.client import AsyncClient
 
@@ -15,16 +15,18 @@ class RAG:
     def __init__(self):
         self.client = AsyncClient()
         self.ball_tree = BERTBallTree()
-        self.timeout: float = 60.0
+        self.timeout: float = 30.0
 
-    def generate_stream(self, question: str, model: str, k: int = 10):
-        start = time()
-        docs_scores, context = self._retrieve_docs(question, k)
+    def generate_stream(
+        self, question: str, corrected_query: str, model: str, k: int = 10
+    ):
+        start = time.time()
+        docs_scores, context = self._retrieve_docs(corrected_query, k)
         prompt = (
             "You're a Python expert. Suppose all the documentation information you know is provided in context section. "
             "Answer on the question as usual but take technical information only from context. "
             'If there is no answer in the context, say, "I can\'t find the answer in the Python documentation"\n'
-            "Highlight cited passages or provide “show sources” toggles ONLY FROM CONTEXT\n"
+            "Highlight cited passages or provide 'show sources' toggles ONLY FROM CONTEXT\n"
             "NO PYTHON CODE EXAMPLES!\n"
             "NO PROMPT REPETITION IN ANSWER!\n"
             "NO EXAMPLES!\n"
@@ -60,10 +62,12 @@ class RAG:
                 max_tokens=500,
             )
 
+            delay = 0.05
+            max_iters = int(self.timeout // delay)
             try:
-                while True:
+                for _ in range(max_iters):
                     chunk = loop.run_until_complete(
-                        asyncio.wait_for(response.__anext__(), timeout=self.timeout)
+                        asyncio.wait_for(response.__anext__(), timeout=self.timeout)  # type: ignore
                     )
 
                     if chunk.choices[0].delta.content:
@@ -73,19 +77,22 @@ class RAG:
                             )
                             + "\n\n"
                         )
-            except asyncio.TimeoutError:
-                print("Timed out waiting for next item.")
+                    time.sleep(delay)
+            except asyncio.TimeoutError as e:
+                raise TimeoutError("Timed out waiting for the model response") from e
             except StopAsyncIteration:
-                print("Generator finished.")
+                # Generator finished
+                pass
             finally:
-                loop.run_until_complete(response.aclose())
+                loop.run_until_complete(response.aclose())  # type: ignore
                 loop.close()
 
         except BaseException as e:
             yield json.dumps({"type": "error", "data": str(e)}) + "\n\n"
 
         yield (
-            json.dumps({"type": "complete", "data": {"elapsed": time() - start}}) + "\n\n"
+            json.dumps({"type": "complete", "data": {"elapsed": time.time() - start}})
+            + "\n\n"
         )
 
     def _retrieve_docs(self, query_m: str, k):

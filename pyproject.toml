@@ -9,6 +9,7 @@ dependencies = [
     "annoy>=1.17.3",
     "beautifulsoup4>=4.13.3",
     "bitsandbytes>=0.45.5",
+    "browser-cookie3>=0.20.1",
     "fastapi[standard]>=0.115.11",
     "g4f>=0.5.2.2",
     "gensim>=4.3.3",

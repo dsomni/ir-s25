@@ -73,6 +73,14 @@ async def document_page(name: str):
 async def get_llm_list():
     return [
         "qwen-2-72b",
+        "qwen-2.5-coder-32b",
+        "mixtral-small-24b",
+        "gpt-4o",
+        "wizardlm-2-7b",
+        "wizardlm-2-8x22b",
+        "dolphin-2.6",
+        "dolphin-2.9",
+        "glm-4",
         "evil",
         "command-r",
     ]
