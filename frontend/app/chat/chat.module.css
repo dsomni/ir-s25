@@ -38,6 +38,10 @@
 
 
 .chatBox {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--matrix-primary);
     border-radius: 0.5rem;
@@ -203,5 +207,59 @@
 
 .toggleButton:hover {
     box-shadow: 0 0 10px var(--matrix-primary);
+}
 
+.thinking {
+    margin-top: auto;
+    text-align: center;
+    color: var(--matrix-primary);
+    font-style: italic;
+    animation: pulse 1.5s infinite;
+    padding-top: 1rem;
+}
+
+.spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid var(--matrix-primary);
+    border-top: 2px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.3;
+    }
+}
+
+.sendButton:disabled {
+    background: gray;
+    color: #222;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.streamingResponse {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    flex-wrap: wrap;
 }

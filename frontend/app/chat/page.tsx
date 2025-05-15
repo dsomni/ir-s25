@@ -24,6 +24,7 @@ export default function ChatPage() {
     const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
     const [streamingResponse, setStreamingResponse] = useState("");
     const [error, setError] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -57,8 +58,9 @@ export default function ChatPage() {
     }, []);
 
     const handleSubmit = async () => {
-        if (!prompt.trim()) return;
+        if (!prompt.trim() || isLoading) return;
         setError("");
+        setIsLoading(true);
 
         // Append user message
         setMessages(prev => [...prev, { role: "user", content: prompt }]);
@@ -105,12 +107,14 @@ export default function ChatPage() {
                                 break;
                             case 'error':
                                 setError(parsed.data || "Unknown error");
+                                setIsLoading(false);
                                 return;
                             default:
                                 console.warn('Unknown message type:', parsed.type);
                         }
                     } catch (e) {
                         console.error('Error parsing message:', e);
+                        setIsLoading(false);
                         return;
                     }
                 }
@@ -121,6 +125,8 @@ export default function ChatPage() {
         } catch (err) {
             console.error("Error during chat request:", err);
             setError("Error: " + (err instanceof Error ? err.message : "Unknown error"));
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -130,7 +136,7 @@ export default function ChatPage() {
 
             <div className={styles.controls}>
                 <Dropdown
-                    options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ label: `k = ${i}`, value: i.toString() }))}
+                    options={[3, 4, 5, 6, 7, 8, 9, 10].map(i => ({ label: `k = ${i}`, value: i.toString() }))}
                     value={kValue}
                     onChange={(newValue) => setKValue(newValue)}
                 />
@@ -151,10 +157,17 @@ export default function ChatPage() {
                     </div>
                 ))}
 
-                {streamingResponse && (
+                {isLoading && (
                     <div className={styles.modelMsg}>
                         <div className={styles.role}><strong>{model.toUpperCase()}</strong></div>
-                        <div>{streamingResponse}</div>
+                        <div className={styles.streamingResponse}>{streamingResponse}<span className={styles.spinner}></span></div>
+
+                    </div>
+                )}
+
+                {isLoading && (
+                    <div className={styles.thinking}>
+                        <span>🤖 Thinking...</span>
                     </div>
                 )}
                 <div ref={chatEndRef} />
@@ -175,8 +188,7 @@ export default function ChatPage() {
                     className={styles.textarea}
 
                 />
-
-                <button onClick={handleSubmit} className={styles.sendButton}>
+                <button onClick={handleSubmit} className={styles.sendButton} disabled={isLoading}>
                     Send
                 </button>
             </div>
