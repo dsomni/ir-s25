@@ -59,7 +59,7 @@ uv run pre-commit run --all-files
 ```
 
 > \[!IMPORTANT]
-> 📄 We **highly recommend** reading [`about.md`](./about.md) to understand the structure and purpose of files and directories.
+> 📄 We **highly recommend** reading [`about.md`](./about.md) to understand the workflow.
 
 ---
 

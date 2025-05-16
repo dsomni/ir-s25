@@ -1,222 +1,257 @@
-# PyFinder
+# 📘 PyFinder
 
-PyFinder is a useful app that allows you to fast search relevant Python documentation files for built-in modules!
+**PyFinder** is a powerful application that enables fast, intelligent search through Python's built-in documentation using advanced retrieval methods.
 
-PyFinder has several modes:
-- **Search Mode** - Allows you to find useful documentation by keywords and phrases, basing its answer on one of indexing approaches (**Inverted Index** or **LLM embedding + Ball Tree**)
-- **Chat Mode (Retrieval-Augmented Generation)** - With help of selected LLM model, you can get all necessary information in our chat section! 
+> \[!IMPORTANT]
+> 📄 We **highly recommend** reading [`README.md`](./README.md) to understand the structure of project and how to run it.
 
-## Technology stack
+---
 
-**Backend:**
+## 📑 Table of Contents
 
-- Python 3.12 - main programming language
-- FastAPI - backend framework
-- NLTK - library for words processing
-- sckit-learn - library with various metrics and algorithms (e.g. Ball Tree)
-- PyTorch - part of main toolkit for working with neural networks and GPU calculations
-- transformers - library for importing and usage different LLMs
-- g4f - free API for hosted LLMs (e.g. evil, command-r, qwen)
-- pybloom-live - data structure, which helps to filter bad words
+- [🔍 Modes](#-modes)
+- [⚙️ Technology Stack](#️-technology-stack)
+  - [🧪 Backend](#-backend)
+    - [📘 Selected Python libraries](#-selected-python-libraries)
+  - [🎨 Frontend](#-frontend)
+  - [🧠 Models](#-models)
+- [🧠 System Design](#-system-design)
+  - [🧩 Workflows](#-workflows)
+- [🧩 Components](#-components)
+  - [🌸 Bloom Filter](#-bloom-filter)
+  - [📝 Norvig Spell Corrector](#-norvig-spell-corrector)
+  - [📚 Indexer (Inverted Index)](#-indexer-inverted-index)
+  - [🧬 Indexer (LLM Embeddings + Ball Tree)](#-indexer-llm-embeddings--ball-tree)
+  - [🤖 RAG (Retrieval-Augmented Generation)](#-rag-retrieval-augmented-generation)
+- [🚧 Challenges & Solutions](#-challenges--solutions)
+- [🌟 Feature Comparison](#-feature-comparison)
 
-**Frontend:**
+---
 
-- NextJS - main frontend language
+## 🔍 Modes
 
-**Models:**
+**PyFinder** has two primary modes of operation:
 
-- Hosted LLMs (e.g. evil, command-r, qwen)
-- "sentence-transformers/all-MiniLM-L6-v2" - for embeddings generation
+- **Search Mode**
+  Quickly find relevant documentation using one of two indexing approaches:
 
-## System Design
-<p align="center">
-  <img src=./pictures/Flow_PyFinder.png/>
-</p>
+  - **Inverted Index**
+  - **LLM Embeddings + Ball Tree**
 
-### Workflows:
+- **Chat Mode (RAG)**
+  Ask natural language questions and get intelligent, sourced answers via Retrieval-Augmented Generation (RAG) powered by LLMs.
 
-1. Frontend ➔ Bloom: Content filtering of incoming query before passing to RAG
-2. Frontend ➔ Norwig: Pass query through Norvig spell corrector
-3. Frontend ➔ Scrapped Data: Access the information about scrapped documents
-4. Bloom ➔ RAG: Pass query to RAG pipeline 
-5. RAG ➔ Norvig: Pass query to Norvig Spell Corrector
-6. Norvig ➔ Indexer: Pass corrected query to indexer to get relevant documents 
-7. Indexer ➔ Scrapped Data: Retrieve relevant documents
-8. RAG ➔ LLM API: Insert query and retrieved documents in prompt for LLM model and get its answer 
+---
 
-## Components:
+## ⚙️ Technology Stack
 
-### Bloom
+### 🧪 Backend
 
-**1. Bad Word List Aggregation**  
-The system builds its lexicon by combining multiple authoritative sources:  
-- [Google's profanity word list](https://github.com/coffee-and-fun/google-profanity-words/tree/main)
-- [LDNOOBW's English bad words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/blob/master/en)
-- [LDNOOBW's Russian bad words](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/blob/master/ru)
+- **Python 3.12** — Primary language
+- **FastAPI** — Web framework
 
-These are fetched via HTTP requests, merged, sanitized (lowercased, deduplicated), and stored locally.
+#### 📘 Selected Python libraries
 
-**2. Efficient Storage with Bloom Filters**  
-For high-performance checking, we use a probabilistic data structure that:  
-- Initializes with 5,000 word capacity (ScalableBloomFilter from `pybloom_live`)  
-- Maintains 0.1% false positive rate
-- Automatically expands for large vocabularies
-- Stores both original words and phrase variants
+- **NLTK** — Text processing
+- **scikit-learn** — ML algorithms (e.g., Ball Tree)
+- **PyTorch** — Neural network library
+- **Transformers** — LLM models
+- **g4f** — Free LLM API access (e.g., `evil`, `command-r`, `qwen`)
+- **pybloom-live** — Probabilistic filtering (bad words)
 
-**3. Content Moderation Logic**  
-When checking text, the system:  
-1. Checks individual words against the filter  
-2. Examines word sequences up to `phrase_length` (default=5)  
-3. Returns the first match found with:  
-   - The offending word/phrase  
-   - Boolean confirmation  
+### 🎨 Frontend
 
-**Key Features**  
-- Automatic cache rebuilding (`force=True`)  
-- Multi-language support (English/Russian)  
-- Space-efficient storage via bloom filters  
-- Configurable phrase detection length  
+- **Next.js** — React framework for UI
 
-### Norvig
+### 🧠 Models
 
-**1. Text Preprocessing Pipeline**  
-Firstly, using `nltk` and `re`, we clean both our scraped data and incoming queries by:
-- Removing stopwords (via `filter_stopwords()`)
-- Tokenizing text into lowercase words (via `tokenize()`)
-- Stripping non-ASCII characters during index building
+- Hosted LLMs: `qwen-2-72b`, `qwen-2.5-coder-32b`,`gpt-4o`, `wizardlm-2-7b`, `wizardlm-2-8x22b`, `dolphin-2.6`, `dolphin-2.9`, `glm-4`, `evil`, `command-r`
 
-**2. Building the Language Model**  
-Based on the cleaned documents, we:
-- Count word frequencies across all documents
-- Calculate each word's probability (occurrence/total words)
-- Optionally precompute edit-distance relationships when `save_distances=True`
+- Local LLMs: [`arnir0/Tiny-LLM`](https://huggingface.co/arnir0/Tiny-LLM), [`sshleifer/tiny-gpt2`](https://huggingface.co/sshleifer/tiny-gpt2)
+- Embedding Model: `sentence-transformers/all-MiniLM-L6-v2`
 
-**3. Generating Spelling Suggestions**  
-For any misspelled word, we:
-- Generate all possible edits within `max_edits` (default=2) using:
-  - Deletions (`acess → access`)
-  - Transpositions (`acess → acess`)
-  - Replacements (`acess → accss`)
-  - Insertions (`acess → access`)
-- Filter candidates to only known vocabulary words
-- Return the most frequent valid candidate
+---
 
-**4. Query Processing**  
-When correcting text, we:
-- Preserve punctuation positioning
-- Optionally skip stopword correction
-- Handle single-word inputs efficiently
+## 🧠 System Design
 
-**Key Optimizations**  
-- Edit dictionaries are precomputed (`save_distances`) for faster lookup
-- Stopword filtering reduces noise in frequency counts
-- Configurable edit distance balances accuracy/speed
+![System Architecture](./pictures/Flow_PyFinder.png)
 
-### Indexer (Inverted Index Search)
+### 🧩 Workflows
 
-We use an **inverted index** to efficiently search through Python documentation files. The system leverages `nltk` to remove English stop words during indexing and query processing, focusing only on meaningful terms.
+1. **Frontend ➔ Bloom** — Filters bad content
+2. **Frontend ➔ Norvig** — Spell corrector
+3. **Frontend ➔ Scraped Data** — Displays scraped docs
+4. **Bloom ➔ RAG** — Sends clean query to RAG
+5. **RAG ➔ Norvig** — Filters bad content
+6. **Norvig ➔ Indexer** — Fetches relevant docs
+7. **Indexer ➔ Scraped Data** — Retrieves matched files
+8. **RAG ➔ LLM API** — Generates and returns LLM answer
 
-**1. Indexing**  
-We build an inverted index that maps each word to the documents containing it
-For each document, we store:
-- Word counts (for TF calculation)
-- Total document length (for normalization)
-- Document titles
+---
 
-**2. Search**
-Queries are tokenized and stop words are removed 
-We use **Levenshtein distance** (with configurable max distance) to find similar words
-Results are ranked using TF-IDF scoring, weighted by:
-    - Term frequency in document
-    - Inverse document frequency
-    - Similarity score ${1}\over{(1 + distance)}$
+## 🧩 Components
 
-**3. Fuzzy matching**:
-- When a word isn't found exactly, we match similar words within the allowed edit distance
-- Each match contributes to the score, weighted by its similarity to the query term
+### 🌸 Bloom Filter
 
-### Indexer (LLM Embeddings + Ball Tree Search)
+#### 1. Bad Word List Aggregation
 
-We use **LLM embeddings** to convert text into dense vector representations and a **Ball Tree** data structure for efficient nearest-neighbor search. The system leverages `sentence-transformers/all-MiniLM-L6-v2` to generate high-quality embeddings that capture semantic meaning.
+Sources merged from:
 
-**1. Embedding Generation**:
-  - We use LLM to convert text into embeddings
-  - Supports `mean` pooling or `cls` token pooling
-**2. Indexing**:
-  - Documents are processed in batches for efficiency 
-  - Embeddings are stored in a Ball Tree for fast similarity search
-**3. Search**:
-  - Query text is embedded using the same LLM model
-  - The Ball Tree finds the k-nearest neighbors in embedding space
-  - Returns either document names or (documents + distances)
+- [Google Profanity List](https://github.com/coffee-and-fun/google-profanity-words/tree/main)
+- [LDNOOBW (English)](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/blob/master/en)
+- [LDNOOBW (Russian)](https://github.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/blob/master/ru)
 
-The system is particularly effective for:
-- Finding semantically similar Python documentation
-- Handling paraphrased queries
-- Discovering related functions/classes based on description
+The merged document is [`data/bad_words/bad_words.txt`](./data/bad_words/bad_words.txt)
 
-### RAG
+#### 2. Efficient Storage
 
-**1. Context-Aware Prompt Engineering**  
-The system uses a structured prompt template that:
-- Restricts answers to provided Python documentation only
-- Requires citation of source documents
-- Prohibits code examples or unsourced information
-- Formats responses with clear references
+- Uses `ScalableBloomFilter` (5000-word capacity, 0.1% false positive)
+- Stores words and phrases (up to 5 words)
 
-**2. Dual-Mode Operation**  
-The assistant supports both synchronous and asynchronous workflows:
-- **Streaming mode**: For real-time responses with progress updates
-  - Yields proposals, content chunks, and timing data
-  - Enforces 30-second timeout for model responses
-- **Batch mode**: For direct question-answer pairs
-  - Returns complete responses with error handling
+#### 3. Moderation Logic
 
-**3. Document Retrieval**  
-When processing queries:
-1. Fetches relevant documentation files from local storage
-2. Combines them with the query into a structured prompt
-3. Tracks source documents for proper attribution
+- Scans individual and multi-word phrases
+- Returns first match with offending term
 
-**4. AI Response Handling**  
-The system carefully manages LLM interactions by:
-- Using both async/sync clients for flexibility
-- Implementing chunked streaming with rate limiting
-- Providing full error handling and timeout protection
-- Maintaining strict separation between docs and generation
+#### Key Features
 
-**Key Features**  
-- Strict Python-only responses with citations
-- Real-time streaming with JSON-formatted outputs
-- Configurable timeout protection
-- Dual client architecture for different use cases
+- Multi-language support
+- Auto cache rebuild
+- Configurable phrase length
 
-## Key challenges and solutions
-Tried w2v was bad
+---
 
-Local model has pure performance or too heavy for our machines
+### 📝 Norvig Spell Corrector
 
-Find free api for LLMs
+[The original post](https://norvig.com/spell-correct.html)
 
+#### 1. Text Preprocessing
 
-## Project Description
-The project is a web application for intelligent search of Python documentation, 
-combining three different approaches:
+- Removes stopwords
+- Tokenizes lowercase words
+- Strips non-ASCII characters
 
-1. **Inverted Index** 
-2. **Embedding search** 
-3. **Generative approach** 
+#### 2. Language Model
 
+- Builds frequency model from cleaned docs
+- Calculates word probabilities
+- Supports precomputed edit dictionaries
 
-The system allows you to:
-- Quickly find relevant documentation sections
-- Compare the results of different search methods
-- Receive extended explanations using language models
+#### 3. Suggestions
 
-## Key Features:
+- Edit types: deletion, transposition, replacement, insertion
+- Filters to valid words, returns most likely candidate
 
-| Approach         |       Technologies       |                                             Advantages                                              |
-|------------------|:------------------------:|:---------------------------------------------------------------------------------------------------:|
-| Inverted index   |     Inverted Index & Levenshtein distance      |                                 High speed, exact matching of terms                                 |
-| Embedding Search |    Embedding via LLM & Ball Tree     |                                 Robust to synonyms and paraphrases                                  |
-| RAG              | API, Prompt Engineering  | Ability to synthesize multiple sources Provides extended explanations beyond simple keyword matches. Answer with only relevant to question information |
+#### 4. Query Processing
+
+- Retains punctuation
+- Skips stopwords if configured
+
+#### Optimizations
+
+- Precomputed dictionaries for speed
+- Stopword filtering for accuracy
+- Tunable max edit distance
+
+---
+
+### 📚 Indexer (Inverted Index)
+
+#### 1. Indexing
+
+- Maps words to documents
+- Stores:
+  - Word counts (TF)
+  - Doc lengths (normalization)
+  - Titles
+
+#### 2. Search
+
+- Uses Levenshtein distance
+- Ranks using TF-IDF weighted by similarity:
+  \[
+  \text{Score} = \frac{1}{1 + \text{edit distance}}
+  \]
+
+#### 3. Fuzzy Matching
+
+- Matches within edit distance
+- Partial matches contribute based on similarity
+
+---
+
+### 🧬 Indexer (LLM Embeddings + Ball Tree)
+
+#### 1. Embedding Generation
+
+- Converts documents to dense vectors
+- Uses `mean` pooling
+
+#### 2. Indexing
+
+- Processes in batches
+- Stores embeddings in a Ball Tree
+
+#### 3. Search
+
+- Embeds query
+- Finds top-k nearest documents
+- Returns documents with corresponding distances (scores)
+
+#### Strengths
+
+- Handles semantic similarity
+- Recognizes paraphrasing and related terms
+
+---
+
+### 🤖 RAG (Retrieval-Augmented Generation)
+
+#### 1. Prompt Engineering
+
+- Restricts answers to context (fetched Python documents)
+- Requires citations
+- Forbids unsourced info and code
+
+#### 2. Modes
+
+- **Streaming**: Live response with time/data metrics
+- **Batch**: Instant complete answers with error handling
+
+#### 3. Retrieval Process
+
+1. Find top-k nearest documents using indexer
+2. Build context using the found documents
+3. Combine context with user query
+4. Pass to LLM with source tracking
+
+#### 4. LLM Handling
+
+- Async/sync client support
+- Streaming + rate limiting
+- Error and timeout handling
+
+#### Key Features
+
+- Python-only responses
+- JSON-formatted streaming output
+
+---
+
+## 🚧 Challenges & Solutions
+
+| Problem                           | Solution/Status                                                                    |
+| --------------------------------- | ---------------------------------------------------------------------------------- |
+| Word2Vec indexer was not accurate | Switched to LLM embeddings                                                         |
+| Local LLM too slow or heavy       | Switched to free hosted APIs ([g4f](https://github.com/xtekky/gpt4free/tree/main)) |
+| Poor spelling correction          | Added Norvig-based spell corrector                                                 |
+
+---
+
+## 🌟 Feature Comparison
+
+| Approach         | Technologies                          | Advantages                                                                       |
+| ---------------- | ------------------------------------- | -------------------------------------------------------------------------------- |
+| Inverted Index   | Inverted Index + Levenshtein distance | High speed, exact match, lightweight                                             |
+| Embedding Search | LLM Embeddings + Ball Tree            | Resilient to synonyms and phrasing                                               |
+| RAG              | API + Prompt Engineering              | Multi-source synthesis, deep answers, citation-based, filters irrelevant content |
