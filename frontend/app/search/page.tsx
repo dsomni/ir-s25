@@ -35,9 +35,10 @@ export default function Search() {
   }, []);
 
   const performSearch = useCallback(async (searchQuery: string, searchIndexer: string) => {
+    setError("");
     if (!searchQuery) {
       setProposals([]);
-      setCorrectedQuery(null);
+      // setCorrectedQuery(null);
       setIsSearching(false);
       return;
     }
@@ -47,7 +48,12 @@ export default function Search() {
       const response = await axios.get(
         `${process.env.API_URL}/search?query=${searchQuery}&indexer=${searchIndexer}`
       );
-      setCorrectedQuery(response.data.corrected);
+      const corrected = response.data.corrected;
+      if (corrected && corrected !== searchQuery) {
+        setCorrectedQuery(corrected);
+      } else {
+        setCorrectedQuery(null);
+      }
       setProposals(response.data.proposals);
     } catch (error) {
       console.error("Error fetching proposals:", error);
@@ -118,7 +124,7 @@ export default function Search() {
 
       {error && <div className={styles.error}>{error}</div>}
 
-      {correctedQuery && correctedQuery != query && (
+      {correctedQuery && (
         <div className={styles.corrected}>
           Did you mean: <span>{correctedQuery}</span>?
         </div>

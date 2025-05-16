@@ -7,7 +7,7 @@ from pathlib import Path
 from nltk.corpus import stopwords
 from tqdm import tqdm
 
-from src.utils import from_current_file, load_json, save_json
+from src.utils import from_current_file, load_json, remove_path, save_json
 
 
 class NorvigSpellCorrector:
@@ -22,6 +22,7 @@ class NorvigSpellCorrector:
         ),
         max_edits: int = 2,
         save_distances: bool = False,
+        force: bool = False,
     ):
         self._max_edits = max_edits
         self.save_distances = save_distances
@@ -32,7 +33,8 @@ class NorvigSpellCorrector:
         self._counter_path = os.path.join(self._spell_dir, "counter.json")
         self._settings_path = os.path.join(self._spell_dir, "settings.json")
 
-        if not os.path.exists(self._spell_dir):
+        if force or not os.path.exists(self._spell_dir):
+            remove_path(self._spell_dir)
             print("Spell index is not found, creating new...")
             os.mkdir(path=self._spell_dir)
             self.build_index()

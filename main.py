@@ -50,7 +50,6 @@ async def search(query: str, indexer: Indexer):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail=f"Indexer '{indexer}' not found"
         ) from exc
-
     return {
         "corrected": corrected_query,
         "proposals": [{"document": doc, "score": score} for doc, score in proposals],

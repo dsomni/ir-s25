@@ -14,6 +14,7 @@ An **Information Retrieval S25 Project**
 - [💼 Requirements](#-requirements)
 - [🚀 Before You Start](#-before-you-start)
 - [⚡ Quick Start](#-quick-start)
+  - [🛠️ Setup](#️-setup)
   - [🏗️ Production](#️-production)
   - [🧪 Development](#-development)
 - [🗂️ Repository Structure](#️-repository-structure)
@@ -64,6 +65,31 @@ uv run pre-commit run --all-files
 ---
 
 ## ⚡ Quick Start
+
+### 🛠️ Setup
+
+Setup project using script:
+
+- **Windows**:
+
+  ```powershell
+  ./setup.bat
+  ```
+
+- **Linux**:
+
+  ```bash
+  bash ./setup.sh
+  ```
+
+Or run corresponding python script:
+
+```bash
+uv run ./src/setup.py
+```
+
+> \[!NOTE]
+> When setting up using script, you can not pass any flags. For flag description run: `uv run ./src/setup.py -h`
 
 ### 🏗️ Production
 
@@ -158,7 +184,6 @@ Or start frontend/backend separately:
 │   │   └── tree.pkl
 │   │
 │   ├── scrapped/                 # Raw scraped web data
-│   │   ├── .gitignore
 │   │   └── index_1_1.json        # Information about scrapped data
 │   │
 │   └── spell_directory/          # Spellcheck-related files

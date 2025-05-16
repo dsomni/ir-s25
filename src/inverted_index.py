@@ -7,7 +7,7 @@ from pathlib import Path
 
 from nltk.corpus import stopwords
 
-from src.utils import from_current_file, load_json, round_float, save_json
+from src.utils import from_current_file, load_json, remove_path, round_float, save_json
 
 
 def compute_levenshtein_distance(w1: str, w2: str) -> int:
@@ -57,10 +57,11 @@ class InvertedIndex:
 
         self.index = defaultdict(set)  # {word : set(document id)}
         self.document_word_count = defaultdict(Counter)  # {document id -> word -> count}
-        self.documents: dict[int, str] = {}  # {id: document title}
-        self.document_lengths: dict[int, int] = {}  # doc_id -> total words in document
+        self.documents: dict[str, str] = {}  # {id: document title}
+        self.document_lengths: dict[str, int] = {}  # doc_id -> total words in document
 
         if force or not os.path.exists(self._index_dir):
+            remove_path(self._index_dir)
             print("Index is not found, creating new...")
             if force:
                 try:
@@ -93,13 +94,13 @@ class InvertedIndex:
                     os.path.join(self._documents_dir, filename), "r", encoding="utf-8"
                 ) as f:
                     text = f.read()
-                    self.documents[document_id] = filename[:-4]
+                    self.documents[str(document_id)] = filename[:-4]
                     words = self._tokenize(text)
-                    self.document_lengths[document_id] = len(words)
+                    self.document_lengths[str(document_id)] = len(words)
 
                     for word in words:
                         self.index[word].add(document_id)
-                        self.document_word_count[document_id][word] += 1
+                        self.document_word_count[str(document_id)][word] += 1
 
         save_json(self._index_path, {k: list(v) for k, v in self.index.items()})
         save_json(self._doc_word_count_path, self.document_word_count)
@@ -108,13 +109,11 @@ class InvertedIndex:
 
     def load_index(self):
         self.index = {k: set(v) for k, v in load_json(self._index_path).items()}
-        self.document_word_count = {
-            int(k): v for k, v in load_json(self._doc_word_count_path).items()
+        self.document_word_count: dict[str, dict[str, int]] = {
+            k: v for k, v in load_json(self._doc_word_count_path).items()
         }
-        self.documents = {int(k): v for k, v in load_json(self._doc_id_path).items()}
-        self.document_lengths = {
-            int(k): v for k, v in load_json(self._doc_len_path).items()
-        }
+        self.documents = {k: v for k, v in load_json(self._doc_id_path).items()}
+        self.document_lengths = {k: v for k, v in load_json(self._doc_len_path).items()}
 
     def find(self, query: str, k: int = 10) -> list:
         query_words = self._tokenize(query)
@@ -129,7 +128,8 @@ class InvertedIndex:
                     doc_freq = len(self.index[match])
                     idf = math.log(total_documents / (1 + doc_freq))
 
-                    for doc_id in self.index[match]:
+                    for doc_id_int in self.index[match]:
+                        doc_id = str(doc_id_int)
                         tf = (
                             self.document_word_count[doc_id][match]
                             / self.document_lengths[doc_id]

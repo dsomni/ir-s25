@@ -1,15 +1,14 @@
 import os
-import shutil
 from pathlib import Path
 
 import requests
 from pybloom_live import ScalableBloomFilter
 
-from src.utils import from_current_file
+from src.utils import from_current_file, remove_path
 
 
 def fetch_words(url):
-    response = requests.get(url)
+    response = requests.get(url, timeout=30)
     if response.status_code == 200:
         return response.text.splitlines()
     return []
@@ -40,11 +39,7 @@ class BloomModerator:
 
         if force or not os.path.exists(self._words_path):
             print("Bad words is not found, creating new...")
-            if force:
-                try:
-                    shutil.rmtree(self._words_dir)
-                except FileNotFoundError:
-                    pass
+            remove_path(self._words_dir)
             os.makedirs(self._words_dir, exist_ok=True)
             self._build()
             print("Complete!")
@@ -53,13 +48,16 @@ class BloomModerator:
 
     def _build(self):
         google_en = requests.get(
-            "https://raw.githubusercontent.com/coffee-and-fun/google-profanity-words/main/data/en.txt"
+            "https://raw.githubusercontent.com/coffee-and-fun/google-profanity-words/main/data/en.txt",
+            timeout=30,
         ).text.splitlines()
         ldnoobw_en = requests.get(
-            "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en"
+            "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en",
+            timeout=30,
         ).text.splitlines()
         ldnoobw_rus = requests.get(
-            "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/ru"
+            "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/ru",
+            timeout=30,
         ).text.splitlines()
         with open(self._words_path, "w", encoding="utf-8") as f:
             f.write("\n".join(sanitize_wordlist(google_en + ldnoobw_en + ldnoobw_rus)))

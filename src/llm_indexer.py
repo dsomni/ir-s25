@@ -1,6 +1,5 @@
 import os
 import re
-import shutil
 from collections import Counter
 from pathlib import Path
 from typing import List
@@ -11,7 +10,7 @@ from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer
 from sklearn.neighbors import BallTree
 
-from src.utils import from_current_file, load_json, save_json
+from src.utils import from_current_file, load_json, remove_path, save_json
 
 STOP_WORDS = set(stopwords.words("english"))
 
@@ -39,12 +38,8 @@ class LlmEmbeddingBuilder:
         self._builder_path = os.path.join(self._index_dir, "builder.json")
 
         if force or not os.path.exists(self._builder_path):
+            remove_path(self._builder_path)
             print("Builder is not found, creating new...")
-            if force:
-                try:
-                    shutil.rmtree(self._index_dir)
-                except FileNotFoundError:
-                    pass
             os.makedirs(self._index_dir, exist_ok=True)
             self.build()
             print("Complete!")
@@ -59,7 +54,7 @@ class LlmEmbeddingBuilder:
     def _load_docs(self) -> list[str]:
         sentences = []
         self.documents = []
-        for document_id, filename in enumerate(os.listdir(self._documents_dir)):
+        for _, filename in enumerate(os.listdir(self._documents_dir)):
             if filename.endswith(".txt"):
                 with open(
                     os.path.join(self._documents_dir, filename), "r", encoding="utf-8"
@@ -151,12 +146,8 @@ class LlmTreeIndexer:
         self._tree_path = os.path.join(self._index_dir, "tree.pkl")
 
         if force or not os.path.exists(self._tree_path):
+            remove_path(self._tree_path)
             print("Tree is not found, creating new...")
-            if force:
-                try:
-                    shutil.rmtree(self._index_dir)
-                except FileNotFoundError:
-                    pass
             os.makedirs(self._index_dir, exist_ok=True)
             self.build_tree()
             print("Complete!")

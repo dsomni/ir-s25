@@ -6,10 +6,12 @@ import nltk
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
+from bloom import BloomModerator
 from llm_indexer import LlmTreeIndexer
 from src.inverted_index import InvertedIndex
 from src.scrapper import ModulesIndex, ModulesScrapper
 from src.spellcheck import NorvigSpellCorrector
+from src.utils import load, save
 
 
 def setup_project(force: bool, skip_scrap: bool):
@@ -29,18 +31,29 @@ def setup_project(force: bool, skip_scrap: bool):
 
     # Setup spell corrector
     print("Building spell corrector...")
-    NorvigSpellCorrector()
+    NorvigSpellCorrector(force=force)
     print("Successfully built spell corrector!\n")
+
+    # Setup Bloom Filter
+    print("Building Bloom Filter...")
+    BloomModerator(force=force)
+    print("Successfully built Bloom Filter!\n")
 
     # Setup Inverted Index
     print("Building Inverted Index...")
-    InvertedIndex()
+    InvertedIndex(force=force)
     print("Successfully built Inverted Index!\n")
 
     # Setup LLM Tree
     print("Building LLM Tree...")
-    LlmTreeIndexer()
+    LlmTreeIndexer(force=force)
     print("Successfully built LLM Tree!\n")
+
+    # Create sample .env
+    if not os.path.exists(".env"):
+        print("Creating sample .env file...")
+        save(".env", load(".env.example"))
+        print("Successfully created .env file...")
 
     print("Done!")
 

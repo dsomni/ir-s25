@@ -45,6 +45,7 @@ class ModulesIndex:
         if os.path.exists(self._path):
             self._data = load_json(self._path)
             return
+        os.makedirs(SAVE_FOLDER, exist_ok=True)
         self._data = self._scrap(load_context(DOCS_INDEX_URL))
         save_json(self._path, self._data)
 
