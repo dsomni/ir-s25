@@ -1,118 +1,910 @@
 {
     "evil + inverted_idx": {
-        "0": {
-            "answer_relevancy": 0.096,
-            "bleu": 0.007,
-            "context_precision": 0.661,
-            "context_recall": 0.724,
-            "faithfulness": 0.75,
+        "base64 encode": {
+            "answer_relevancy": 0.804,
+            "bleu": 0,
+            "context_precision": 0.817,
+            "context_recall": 0.748,
+            "faithfulness": 0.817,
+            "rouge1": 0.118,
+            "rougeL": 0.118
+        },
+        "check file exists": {
+            "answer_relevancy": 0.199,
+            "bleu": 0,
+            "context_precision": 0.759,
+            "context_recall": 0.263,
+            "faithfulness": 0.766,
             "rouge1": 0.0,
             "rougeL": 0.0
         },
-        "1": {
-            "answer_relevancy": 0.144,
+        "create temporary file": {
+            "answer_relevancy": 0.666,
             "bleu": 0,
-            "context_precision": 0.69,
-            "context_recall": 0.446,
-            "faithfulness": 0.69,
+            "context_precision": 0.796,
+            "context_recall": 0.472,
+            "faithfulness": 0.796,
             "rouge1": 0.0,
             "rougeL": 0.0
+        },
+        "create zip archive": {
+            "answer_relevancy": -0.006,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.036,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "csv reading": {
+            "answer_relevancy": 0.064,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.007,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "datetime difference": {
+            "answer_relevancy": 0.166,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.003,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "deep copy object": {
+            "answer_relevancy": 0.586,
+            "bleu": 0.001,
+            "context_precision": 0.514,
+            "context_recall": 0.702,
+            "faithfulness": 0.514,
+            "rouge1": 0.011,
+            "rougeL": 0.011
+        },
+        "generate random number": {
+            "answer_relevancy": 0.674,
+            "bleu": 0.005,
+            "context_precision": 0.683,
+            "context_recall": 0.474,
+            "faithfulness": 0.712,
+            "rouge1": 0.043,
+            "rougeL": 0.043
+        },
+        "generate uuid": {
+            "answer_relevancy": 0.794,
+            "bleu": 0.007,
+            "context_precision": 0.794,
+            "context_recall": 0.766,
+            "faithfulness": 0.785,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "get environment variables": {
+            "answer_relevancy": 0.006,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.157,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "json pretty print": {
+            "answer_relevancy": 0.68,
+            "bleu": 0,
+            "context_precision": 0.714,
+            "context_recall": 0.429,
+            "faithfulness": 0.733,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "list permutations": {
+            "answer_relevancy": 0.042,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.192,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "logarithm computation": {
+            "answer_relevancy": 0.569,
+            "bleu": 0.001,
+            "context_precision": 0.668,
+            "context_recall": 0.694,
+            "faithfulness": 0.736,
+            "rouge1": 0.044,
+            "rougeL": 0.044
         },
         "mean": {
-            "answer_relevancy": 0.12,
-            "bleu": 0.0035,
-            "context_precision": 0.67550004,
-            "context_recall": 0.585,
-            "faithfulness": 0.72,
+            "answer_relevancy": 0.395125,
+            "bleu": 0.0015416666666666669,
+            "context_precision": 0.4126666697363059,
+            "context_recall": 0.345,
+            "faithfulness": 0.45508337,
+            "rouge1": 0.017374999999999998,
+            "rougeL": 0.017374999999999998
+        },
+        "measure execution time": {
+            "answer_relevancy": 0.521,
+            "bleu": 0.002,
+            "context_precision": 0.0,
+            "context_recall": 0.032,
+            "faithfulness": -0.015,
+            "rouge1": 0.018,
+            "rougeL": 0.018
+        },
+        "memory usage": {
+            "answer_relevancy": 0.585,
+            "bleu": 0,
+            "context_precision": 0.712,
+            "context_recall": 0.796,
+            "faithfulness": 0.712,
+            "rouge1": 0.062,
+            "rougeL": 0.062
+        },
+        "open gzip file": {
+            "answer_relevancy": 0.024,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.097,
+            "faithfulness": 0.045,
             "rouge1": 0.0,
             "rougeL": 0.0
+        },
+        "parse command line arguments": {
+            "answer_relevancy": 0.223,
+            "bleu": 0,
+            "context_precision": 0.335,
+            "context_recall": 0.011,
+            "faithfulness": 0.335,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "read json file": {
+            "answer_relevancy": 0.085,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.109,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "regex match": {
+            "answer_relevancy": 0.515,
+            "bleu": 0.006,
+            "context_precision": 0.596,
+            "context_recall": 0.492,
+            "faithfulness": 0.414,
+            "rouge1": 0.043,
+            "rougeL": 0.043
+        },
+        "serialize object": {
+            "answer_relevancy": 0.0,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.012,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "sin computation": {
+            "answer_relevancy": 0.69,
+            "bleu": 0.014,
+            "context_precision": 0.619,
+            "context_recall": 0.488,
+            "faithfulness": 0.471,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "suppress traceback": {
+            "answer_relevancy": 0.606,
+            "bleu": 0.001,
+            "context_precision": 0.689,
+            "context_recall": 0.548,
+            "faithfulness": 0.689,
+            "rouge1": 0.025,
+            "rougeL": 0.025
+        },
+        "time sleep": {
+            "answer_relevancy": 0.354,
+            "bleu": 0,
+            "context_precision": 0.695,
+            "context_recall": 0.184,
+            "faithfulness": 0.695,
+            "rouge1": 0.029,
+            "rougeL": 0.029
+        },
+        "url encode string": {
+            "answer_relevancy": 0.636,
+            "bleu": 0.0,
+            "context_precision": 0.513,
+            "context_recall": 0.646,
+            "faithfulness": 0.569,
+            "rouge1": 0.024,
+            "rougeL": 0.024
         }
     },
     "evil + llm_tree_idx": {
-        "0": {
-            "answer_relevancy": 0.087,
-            "bleu": 0.017,
-            "context_precision": 0.854,
-            "context_recall": 0.719,
-            "faithfulness": 0.771,
-            "rouge1": 0.222,
-            "rougeL": 0.222
+        "base64 encode": {
+            "answer_relevancy": 0.715,
+            "bleu": 0.003,
+            "context_precision": 0.764,
+            "context_recall": 0.686,
+            "faithfulness": 0.833,
+            "rouge1": 0.029,
+            "rougeL": 0.029
         },
-        "1": {
-            "answer_relevancy": 0.152,
-            "bleu": 0.008,
-            "context_precision": 0.817,
-            "context_recall": 0.63,
-            "faithfulness": 0.84,
-            "rouge1": 0.154,
-            "rougeL": 0.154
+        "check file exists": {
+            "answer_relevancy": 0.741,
+            "bleu": 0.005,
+            "context_precision": 0.852,
+            "context_recall": 0.672,
+            "faithfulness": 0.787,
+            "rouge1": 0.047,
+            "rougeL": 0.047
+        },
+        "create temporary file": {
+            "answer_relevancy": 0.707,
+            "bleu": 0.003,
+            "context_precision": 0.811,
+            "context_recall": 0.638,
+            "faithfulness": 0.811,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "create zip archive": {
+            "answer_relevancy": 0.798,
+            "bleu": 0.004,
+            "context_precision": 0.71,
+            "context_recall": 0.554,
+            "faithfulness": 0.675,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "csv reading": {
+            "answer_relevancy": 0.556,
+            "bleu": 0.003,
+            "context_precision": 0.815,
+            "context_recall": 0.506,
+            "faithfulness": 0.815,
+            "rouge1": 0.052,
+            "rougeL": 0.052
+        },
+        "datetime difference": {
+            "answer_relevancy": 0.063,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.003,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "deep copy object": {
+            "answer_relevancy": 0.623,
+            "bleu": 0.001,
+            "context_precision": 0.603,
+            "context_recall": 0.702,
+            "faithfulness": 0.603,
+            "rouge1": 0.01,
+            "rougeL": 0.01
+        },
+        "generate random number": {
+            "answer_relevancy": 0.666,
+            "bleu": 0.001,
+            "context_precision": 0.733,
+            "context_recall": 0.513,
+            "faithfulness": 0.747,
+            "rouge1": 0.012,
+            "rougeL": 0.012
+        },
+        "generate uuid": {
+            "answer_relevancy": 0.746,
+            "bleu": 0.004,
+            "context_precision": 0.685,
+            "context_recall": 0.66,
+            "faithfulness": 0.664,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "get environment variables": {
+            "answer_relevancy": 0.667,
+            "bleu": 0.005,
+            "context_precision": 0.696,
+            "context_recall": 0.574,
+            "faithfulness": 0.689,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "json pretty print": {
+            "answer_relevancy": 0.689,
+            "bleu": 0.005,
+            "context_precision": 0.588,
+            "context_recall": 0.419,
+            "faithfulness": 0.661,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "list permutations": {
+            "answer_relevancy": 0.617,
+            "bleu": 0.001,
+            "context_precision": 0.787,
+            "context_recall": 0.65,
+            "faithfulness": 0.787,
+            "rouge1": 0.018,
+            "rougeL": 0.018
+        },
+        "logarithm computation": {
+            "answer_relevancy": 0.627,
+            "bleu": 0.007,
+            "context_precision": 0.619,
+            "context_recall": 0.685,
+            "faithfulness": 0.671,
+            "rouge1": 0.0,
+            "rougeL": 0.0
         },
         "mean": {
-            "answer_relevancy": 0.1195,
-            "bleu": 0.0125,
-            "context_precision": 0.8355,
-            "context_recall": 0.6745,
-            "faithfulness": 0.80550003,
-            "rouge1": 0.188,
-            "rougeL": 0.188
+            "answer_relevancy": 0.62825,
+            "bleu": 0.0037916666666666667,
+            "context_precision": 0.6847499956687292,
+            "context_recall": 0.58754164,
+            "faithfulness": 0.6956666,
+            "rouge1": 0.02179166666666667,
+            "rougeL": 0.02179166666666667
+        },
+        "measure execution time": {
+            "answer_relevancy": 0.628,
+            "bleu": 0.003,
+            "context_precision": 0.684,
+            "context_recall": 0.681,
+            "faithfulness": 0.752,
+            "rouge1": 0.035,
+            "rougeL": 0.035
+        },
+        "memory usage": {
+            "answer_relevancy": 0.57,
+            "bleu": 0.004,
+            "context_precision": 0.709,
+            "context_recall": 0.785,
+            "faithfulness": 0.74,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "open gzip file": {
+            "answer_relevancy": 0.819,
+            "bleu": 0.005,
+            "context_precision": 0.839,
+            "context_recall": 0.677,
+            "faithfulness": 0.839,
+            "rouge1": 0.05,
+            "rougeL": 0.05
+        },
+        "parse command line arguments": {
+            "answer_relevancy": 0.76,
+            "bleu": 0.002,
+            "context_precision": 0.798,
+            "context_recall": 0.742,
+            "faithfulness": 0.847,
+            "rouge1": 0.03,
+            "rougeL": 0.03
+        },
+        "read json file": {
+            "answer_relevancy": 0.607,
+            "bleu": 0.008,
+            "context_precision": 0.607,
+            "context_recall": 0.48,
+            "faithfulness": 0.607,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "regex match": {
+            "answer_relevancy": 0.504,
+            "bleu": 0.004,
+            "context_precision": 0.661,
+            "context_recall": 0.58,
+            "faithfulness": 0.608,
+            "rouge1": 0.07,
+            "rougeL": 0.07
+        },
+        "serialize object": {
+            "answer_relevancy": 0.522,
+            "bleu": 0.001,
+            "context_precision": 0.678,
+            "context_recall": 0.592,
+            "faithfulness": 0.705,
+            "rouge1": 0.018,
+            "rougeL": 0.018
+        },
+        "sin computation": {
+            "answer_relevancy": 0.651,
+            "bleu": 0.012,
+            "context_precision": 0.583,
+            "context_recall": 0.724,
+            "faithfulness": 0.584,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "suppress traceback": {
+            "answer_relevancy": 0.76,
+            "bleu": 0.006,
+            "context_precision": 0.784,
+            "context_recall": 0.518,
+            "faithfulness": 0.784,
+            "rouge1": 0.082,
+            "rougeL": 0.082
+        },
+        "time sleep": {
+            "answer_relevancy": 0.342,
+            "bleu": 0.001,
+            "context_precision": 0.646,
+            "context_recall": 0.305,
+            "faithfulness": 0.646,
+            "rouge1": 0.034,
+            "rougeL": 0.034
+        },
+        "url encode string": {
+            "answer_relevancy": 0.7,
+            "bleu": 0.003,
+            "context_precision": 0.782,
+            "context_recall": 0.761,
+            "faithfulness": 0.782,
+            "rouge1": 0.036,
+            "rougeL": 0.036
         }
     },
     "qwen-2-72b + inverted_idx": {
-        "0": {
-            "answer_relevancy": 0.085,
-            "bleu": 0.008,
-            "context_precision": 0.732,
-            "context_recall": 0.719,
-            "faithfulness": 0.776,
+        "base64 encode": {
+            "answer_relevancy": 0.829,
+            "bleu": 0,
+            "context_precision": 0.855,
+            "context_recall": 0.748,
+            "faithfulness": 0.855,
             "rouge1": 0.0,
             "rougeL": 0.0
         },
-        "1": {
-            "answer_relevancy": 0.108,
+        "check file exists": {
+            "answer_relevancy": 0.603,
+            "bleu": 0.006,
+            "context_precision": 0.786,
+            "context_recall": 0.366,
+            "faithfulness": 0.786,
+            "rouge1": 0.1,
+            "rougeL": 0.1
+        },
+        "create temporary file": {
+            "answer_relevancy": 0.722,
             "bleu": 0,
-            "context_precision": 0.636,
-            "context_recall": 0.446,
-            "faithfulness": 0.636,
+            "context_precision": 0.782,
+            "context_recall": 0.472,
+            "faithfulness": 0.782,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "create zip archive": {
+            "answer_relevancy": 0.104,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.036,
+            "faithfulness": 0.066,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "csv reading": {
+            "answer_relevancy": 0.06,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.007,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "datetime difference": {
+            "answer_relevancy": 0.063,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.003,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "deep copy object": {
+            "answer_relevancy": 0.798,
+            "bleu": 0.015,
+            "context_precision": 0.771,
+            "context_recall": 0.702,
+            "faithfulness": 0.771,
+            "rouge1": 0.118,
+            "rougeL": 0.118
+        },
+        "generate random number": {
+            "answer_relevancy": 0.756,
+            "bleu": 0.006,
+            "context_precision": 0.714,
+            "context_recall": 0.592,
+            "faithfulness": 0.766,
+            "rouge1": 0.05,
+            "rougeL": 0.05
+        },
+        "generate uuid": {
+            "answer_relevancy": 0.797,
+            "bleu": 0.012,
+            "context_precision": 0.784,
+            "context_recall": 0.748,
+            "faithfulness": 0.784,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "get environment variables": {
+            "answer_relevancy": 0.109,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.157,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "json pretty print": {
+            "answer_relevancy": 0.035,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.092,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "list permutations": {
+            "answer_relevancy": 0.093,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.192,
+            "faithfulness": 0.066,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "logarithm computation": {
+            "answer_relevancy": 0.635,
+            "bleu": 0.005,
+            "context_precision": 0.661,
+            "context_recall": 0.678,
+            "faithfulness": 0.678,
             "rouge1": 0.0,
             "rougeL": 0.0
         },
         "mean": {
-            "answer_relevancy": 0.0965,
+            "answer_relevancy": 0.37004164,
+            "bleu": 0.0034166666666666664,
+            "context_precision": 0.3697500030199687,
+            "context_recall": 0.33833334,
+            "faithfulness": 0.41058335,
+            "rouge1": 0.01925,
+            "rougeL": 0.01925
+        },
+        "measure execution time": {
+            "answer_relevancy": 0.094,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.032,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "memory usage": {
+            "answer_relevancy": 0.624,
+            "bleu": 0,
+            "context_precision": 0.736,
+            "context_recall": 0.796,
+            "faithfulness": 0.736,
+            "rouge1": 0.056,
+            "rougeL": 0.056
+        },
+        "open gzip file": {
+            "answer_relevancy": 0.094,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.097,
+            "faithfulness": 0.164,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "parse command line arguments": {
+            "answer_relevancy": 0.11,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.086,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "read json file": {
+            "answer_relevancy": 0.608,
             "bleu": 0.004,
-            "context_precision": 0.684,
-            "context_recall": 0.5825,
-            "faithfulness": 0.706,
+            "context_precision": 0.628,
+            "context_recall": 0.339,
+            "faithfulness": 0.715,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "regex match": {
+            "answer_relevancy": 0.534,
+            "bleu": 0.006,
+            "context_precision": 0.811,
+            "context_recall": 0.613,
+            "faithfulness": 0.811,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "serialize object": {
+            "answer_relevancy": 0.085,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.012,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "sin computation": {
+            "answer_relevancy": 0.669,
+            "bleu": 0.013,
+            "context_precision": 0.588,
+            "context_recall": 0.724,
+            "faithfulness": 0.585,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "suppress traceback": {
+            "answer_relevancy": 0.353,
+            "bleu": 0.015,
+            "context_precision": 0.758,
+            "context_recall": 0.548,
+            "faithfulness": 0.758,
+            "rouge1": 0.138,
+            "rougeL": 0.138
+        },
+        "time sleep": {
+            "answer_relevancy": -0.002,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.165,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "url encode string": {
+            "answer_relevancy": 0.108,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.007,
+            "faithfulness": 0.059,
             "rouge1": 0.0,
             "rougeL": 0.0
         }
     },
     "qwen-2-72b + llm_tree_idx": {
-        "0": {
-            "answer_relevancy": 0.066,
-            "bleu": 0.011,
-            "context_precision": 0.739,
-            "context_recall": 0.719,
-            "faithfulness": 0.77,
-            "rouge1": 0.194,
-            "rougeL": 0.194
-        },
-        "1": {
-            "answer_relevancy": 0.137,
+        "base64 encode": {
+            "answer_relevancy": 0.735,
             "bleu": 0,
-            "context_precision": 0.838,
-            "context_recall": 0.63,
-            "faithfulness": 0.757,
+            "context_precision": 0.921,
+            "context_recall": 0.748,
+            "faithfulness": 0.921,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "check file exists": {
+            "answer_relevancy": 0.797,
+            "bleu": 0.007,
+            "context_precision": 0.724,
+            "context_recall": 0.659,
+            "faithfulness": 0.724,
+            "rouge1": 0.125,
+            "rougeL": 0.125
+        },
+        "create temporary file": {
+            "answer_relevancy": 0.806,
+            "bleu": 0.004,
+            "context_precision": 0.744,
+            "context_recall": 0.607,
+            "faithfulness": 0.704,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "create zip archive": {
+            "answer_relevancy": 0.767,
+            "bleu": 0.001,
+            "context_precision": 0.712,
+            "context_recall": 0.554,
+            "faithfulness": 0.712,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "csv reading": {
+            "answer_relevancy": 0.709,
+            "bleu": 0.004,
+            "context_precision": 0.828,
+            "context_recall": 0.506,
+            "faithfulness": 0.828,
+            "rouge1": 0.037,
+            "rougeL": 0.037
+        },
+        "datetime difference": {
+            "answer_relevancy": 0.063,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": -0.003,
+            "faithfulness": 0.059,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "deep copy object": {
+            "answer_relevancy": 0.687,
+            "bleu": 0,
+            "context_precision": 0.703,
+            "context_recall": 0.702,
+            "faithfulness": 0.703,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "generate random number": {
+            "answer_relevancy": 0.764,
+            "bleu": 0.007,
+            "context_precision": 0.718,
+            "context_recall": 0.592,
+            "faithfulness": 0.761,
+            "rouge1": 0.051,
+            "rougeL": 0.051
+        },
+        "generate uuid": {
+            "answer_relevancy": 0.752,
+            "bleu": 0.006,
+            "context_precision": 0.718,
+            "context_recall": 0.701,
+            "faithfulness": 0.73,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "get environment variables": {
+            "answer_relevancy": 0.732,
+            "bleu": 0.008,
+            "context_precision": 0.76,
+            "context_recall": 0.712,
+            "faithfulness": 0.76,
+            "rouge1": 0.121,
+            "rougeL": 0.121
+        },
+        "json pretty print": {
+            "answer_relevancy": 0.694,
+            "bleu": 0.006,
+            "context_precision": 0.579,
+            "context_recall": 0.419,
+            "faithfulness": 0.65,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "list permutations": {
+            "answer_relevancy": 0.748,
+            "bleu": 0.018,
+            "context_precision": 0.636,
+            "context_recall": 0.65,
+            "faithfulness": 0.636,
+            "rouge1": 0.133,
+            "rougeL": 0.133
+        },
+        "logarithm computation": {
+            "answer_relevancy": 0.657,
+            "bleu": 0.009,
+            "context_precision": 0.633,
+            "context_recall": 0.646,
+            "faithfulness": 0.66,
             "rouge1": 0.0,
             "rougeL": 0.0
         },
         "mean": {
-            "answer_relevancy": 0.1015,
-            "bleu": 0.0055,
-            "context_precision": 0.7885,
-            "context_recall": 0.6745,
-            "faithfulness": 0.7635,
-            "rouge1": 0.097,
-            "rougeL": 0.097
+            "answer_relevancy": 0.65045834,
+            "bleu": 0.005583333333333333,
+            "context_precision": 0.6494999974966049,
+            "context_recall": 0.5755833,
+            "faithfulness": 0.6602083,
+            "rouge1": 0.036208333333333335,
+            "rougeL": 0.036208333333333335
+        },
+        "measure execution time": {
+            "answer_relevancy": 0.577,
+            "bleu": 0.007,
+            "context_precision": 0.637,
+            "context_recall": 0.721,
+            "faithfulness": 0.637,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "memory usage": {
+            "answer_relevancy": 0.537,
+            "bleu": 0.003,
+            "context_precision": 0.71,
+            "context_recall": 0.713,
+            "faithfulness": 0.741,
+            "rouge1": 0.034,
+            "rougeL": 0.034
+        },
+        "open gzip file": {
+            "answer_relevancy": 0.691,
+            "bleu": 0.002,
+            "context_precision": 0.844,
+            "context_recall": 0.677,
+            "faithfulness": 0.844,
+            "rouge1": 0.032,
+            "rougeL": 0.032
+        },
+        "parse command line arguments": {
+            "answer_relevancy": 0.876,
+            "bleu": 0.006,
+            "context_precision": 0.653,
+            "context_recall": 0.742,
+            "faithfulness": 0.676,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "read json file": {
+            "answer_relevancy": 0.568,
+            "bleu": 0.001,
+            "context_precision": 0.653,
+            "context_recall": 0.48,
+            "faithfulness": 0.653,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "regex match": {
+            "answer_relevancy": 0.511,
+            "bleu": 0.004,
+            "context_precision": 0.675,
+            "context_recall": 0.58,
+            "faithfulness": 0.632,
+            "rouge1": 0.062,
+            "rougeL": 0.062
+        },
+        "serialize object": {
+            "answer_relevancy": 0.603,
+            "bleu": 0.005,
+            "context_precision": 0.693,
+            "context_recall": 0.592,
+            "faithfulness": 0.775,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "sin computation": {
+            "answer_relevancy": 0.661,
+            "bleu": 0.012,
+            "context_precision": 0.604,
+            "context_recall": 0.724,
+            "faithfulness": 0.607,
+            "rouge1": 0.0,
+            "rougeL": 0.0
+        },
+        "suppress traceback": {
+            "answer_relevancy": 0.623,
+            "bleu": 0,
+            "context_precision": 0.0,
+            "context_recall": 0.026,
+            "faithfulness": -0.011,
+            "rouge1": 0.105,
+            "rougeL": 0.105
+        },
+        "time sleep": {
+            "answer_relevancy": 0.445,
+            "bleu": 0.008,
+            "context_precision": 0.678,
+            "context_recall": 0.305,
+            "faithfulness": 0.678,
+            "rouge1": 0.069,
+            "rougeL": 0.069
+        },
+        "url encode string": {
+            "answer_relevancy": 0.608,
+            "bleu": 0.016,
+            "context_precision": 0.765,
+            "context_recall": 0.761,
+            "faithfulness": 0.765,
+            "rouge1": 0.1,
+            "rougeL": 0.1
         }
     }
 }

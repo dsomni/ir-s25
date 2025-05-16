@@ -1,15 +1,187 @@
 {
-    "0": {
-        "query": "sin",
+    "sin computation": {
+        "query": "How can I compute sine in Python?",
         "ground_truths": [
             "math.sin",
             "cmath.sin"
         ]
     },
-    "1": {
-        "query": "pi",
+    "read json file": {
+        "query": "How do I read a JSON file in Python?",
         "ground_truths": [
-            "math.pi"
+            "json.load",
+            "json.loads"
+        ]
+    },
+    "datetime difference": {
+        "query": "How do I calculate the difference between two dates?",
+        "ground_truths": [
+            "datetime.timedelta",
+            "datetime.datetime"
+        ]
+    },
+    "list permutations": {
+        "query": "How do I generate permutations of a list?",
+        "ground_truths": [
+            "itertools.permutations"
+        ]
+    },
+    "generate random number": {
+        "query": "How can I generate a random number?",
+        "ground_truths": [
+            "random.random",
+            "random.randint",
+            "random.uniform",
+            "random.randrange"
+        ]
+    },
+    "check file exists": {
+        "query": "How do I check if a file exists?",
+        "ground_truths": [
+            "os.path.exists",
+            "os.path.isfile"
+        ]
+    },
+    "parse command line arguments": {
+        "query": "How do I parse command line arguments?",
+        "ground_truths": [
+            "argparse.ArgumentParser",
+            "sys.argv"
+        ]
+    },
+    "open gzip file": {
+        "query": "How do I read a gzip compressed file?",
+        "ground_truths": [
+            "gzip.open"
+        ]
+    },
+    "regex match": {
+        "query": "How do I match a regex in Python?",
+        "ground_truths": [
+            "re.match",
+            "re.search",
+            "re.fullmatch",
+            "re.compile"
+        ]
+    },
+    "serialize object": {
+        "query": "How do I serialize an object in Python?",
+        "ground_truths": [
+            "pickle.dump",
+            "pickle.dumps",
+            "json.dump",
+            "json.dumps",
+            "marshal.dump"
+        ]
+    },
+    "create temporary file": {
+        "query": "How can I create a temporary file?",
+        "ground_truths": [
+            "tempfile.TemporaryFile",
+            "tempfile.NamedTemporaryFile",
+            "tempfile.mkstemp",
+            "tempfile.SpooledTemporaryFile"
+        ]
+    },
+    "create zip archive": {
+        "query": "How do I create a zip archive?",
+        "ground_truths": [
+            "zipfile.ZipFile",
+            "shutil.make_archive"
+        ]
+    },
+    "csv reading": {
+        "query": "How do I read CSV files?",
+        "ground_truths": [
+            "csv.reader",
+            "csv.DictReader"
+        ]
+    },
+    "deep copy object": {
+        "query": "How do I make a deep copy of an object?",
+        "ground_truths": [
+            "copy.deepcopy"
+        ]
+    },
+    "url encode string": {
+        "query": "How can I URL-encode a string in Python?",
+        "ground_truths": [
+            "urllib.parse.quote",
+            "urllib.parse.urlencode"
+        ]
+    },
+    "time sleep": {
+        "query": "How do I pause execution for a few seconds?",
+        "ground_truths": [
+            "time.sleep"
+        ]
+    },
+    "memory usage": {
+        "query": "How do I check memory usage in Python?",
+        "ground_truths": [
+            "tracemalloc.start",
+            "tracemalloc.get_traced_memory",
+            "gc.get_stats",
+            "sys.getsizeof"
+        ]
+    },
+    "base64 encode": {
+        "query": "How do I encode data in base64?",
+        "ground_truths": [
+            "base64.b64encode",
+            "base64.encodebytes"
+        ]
+    },
+    "json pretty print": {
+        "query": "How do I pretty print JSON in Python?",
+        "ground_truths": [
+            "json.dumps",
+            "pprint.pprint"
+        ]
+    },
+    "suppress traceback": {
+        "query": "How can I suppress traceback for expected exceptions?",
+        "ground_truths": [
+            "contextlib.suppress",
+            "warnings.filterwarnings",
+            "sys.excepthook",
+            "logging.exception",
+            "contextlib.redirect_stdout",
+            "contextlib.redirect_stderr",
+            "warnings.catch_warnings",
+            "contextlib.nullcontext"
+        ]
+    },
+    "logarithm computation": {
+        "query": "How do I compute a logarithm in Python?",
+        "ground_truths": [
+            "math.log",
+            "math.log10",
+            "math.log2",
+            "cmath.log"
+        ]
+    },
+    "generate uuid": {
+        "query": "How do I generate a UUID in Python?",
+        "ground_truths": [
+            "uuid.uuid4",
+            "uuid.uuid1",
+            "uuid.uuid5"
+        ]
+    },
+    "measure execution time": {
+        "query": "How do I measure how long a function takes to run?",
+        "ground_truths": [
+            "time.time",
+            "time.perf_counter",
+            "timeit.timeit"
+        ]
+    },
+    "get environment variables": {
+        "query": "How can I read environment variables in Python?",
+        "ground_truths": [
+            "os.environ",
+            "os.getenv"
         ]
     }
 }
