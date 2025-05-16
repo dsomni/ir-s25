@@ -20,7 +20,8 @@ def save_json(path: str | Path, data: dict):
                 data,
                 option=orjson.OPT_SORT_KEYS
                 + orjson.OPT_SERIALIZE_NUMPY
-                + orjson.OPT_APPEND_NEWLINE,
+                + orjson.OPT_APPEND_NEWLINE
+                + orjson.OPT_NON_STR_KEYS,
             )
         )
 
