@@ -1,0 +1,350 @@
+{
+    "evil + inverted_idx": {
+        "0": {
+            "ground_truths": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "ground_truths_idx": [
+                2651,
+                313
+            ],
+            "llm_output": "The sine of a number can be calculated using the `cmath.sin` function for complex numbers or the `math.sin` function for real numbers. The `cmath.sin` function returns the sine of a complex number, while the `math.sin` function returns the sine of a real number in radians.\n\nReferences: [1, 2]",
+            "query": "0",
+            "responses": [
+                "cmath.sin",
+                "math.sin"
+            ],
+            "responses_idx": [
+                313,
+                2651
+            ],
+            "sources": [
+                "cmath.sin",
+                "math.sin",
+                "math.asin",
+                "cmath.sinh",
+                "cmath.rect",
+                "os.killpg",
+                "curses.ascii.SYN",
+                "curses.ascii.SI",
+                "cmath.asin",
+                "stat.S_ISUID"
+            ],
+            "sources_idx": [
+                313,
+                2651,
+                2645,
+                319,
+                304,
+                3149,
+                709,
+                702,
+                310,
+                4065
+            ]
+        },
+        "1": {
+            "ground_truths": [
+                "math.pi"
+            ],
+            "ground_truths_idx": [
+                2665
+            ],
+            "llm_output": "The mathematical constant Ï, as a float.\nReferences: [4]",
+            "query": "1",
+            "responses": [
+                "cmath.pi"
+            ],
+            "responses_idx": [
+                325
+            ],
+            "sources": [
+                "math.asin",
+                "cmath.rect",
+                "math.atan",
+                "cmath.pi",
+                "cmath.polar",
+                "turtle.pd",
+                "turtle.pu",
+                "math.atan2",
+                "cmath.sin",
+                "pdb.pm"
+            ],
+            "sources_idx": [
+                2645,
+                304,
+                2646,
+                325,
+                303,
+                5042,
+                5045,
+                2647,
+                313,
+                3431
+            ]
+        }
+    },
+    "evil + llm_tree_idx": {
+        "0": {
+            "ground_truths": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "ground_truths_idx": [
+                2651,
+                313
+            ],
+            "llm_output": "The sine of x radians is returned by the math.sin function.\n\nReferences: [1, 2]",
+            "query": "0",
+            "responses": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "responses_idx": [
+                2651,
+                313
+            ],
+            "sources": [
+                "math.sin",
+                "cmath.sin",
+                "math.degrees",
+                "math.sinh",
+                "math.asin",
+                "math.radians",
+                "cmath.sinh",
+                "math.asinh",
+                "cmath.asinh",
+                "turtle.radians"
+            ],
+            "sources_idx": [
+                2651,
+                313,
+                2653,
+                2659,
+                2645,
+                2654,
+                319,
+                2656,
+                316,
+                5040
+            ]
+        },
+        "1": {
+            "ground_truths": [
+                "math.pi"
+            ],
+            "ground_truths_idx": [
+                2665
+            ],
+            "llm_output": "The mathematical constant pi (Ï) is approximately 3.141592. It is available in the math module as `math.pi` and in the cmath module as `cmath.pi`.\n\nReferences: [1, 10]",
+            "query": "1",
+            "responses": [
+                "math.pi",
+                "cmath.pi"
+            ],
+            "responses_idx": [
+                2665,
+                325
+            ],
+            "sources": [
+                "math.pi",
+                "math.tau",
+                "math.asin",
+                "turtle.radians",
+                "turtle.circle",
+                "math.acos",
+                "turtle.pu",
+                "math.atan",
+                "turtle.right",
+                "cmath.pi"
+            ],
+            "sources_idx": [
+                2665,
+                2667,
+                2645,
+                5040,
+                5025,
+                2644,
+                5045,
+                2646,
+                5012,
+                325
+            ]
+        }
+    },
+    "qwen-2-72b + inverted_idx": {
+        "0": {
+            "ground_truths": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "ground_truths_idx": [
+                2651,
+                313
+            ],
+            "llm_output": "The `sin` function is available in both the `math` and `cmath` modules. \n\n- `math.sin(x)`: Returns the sine of x radians.\n- `cmath.sin(z)`: Returns the sine of the complex number z.\n\nReferences: [2, 1]",
+            "query": "0",
+            "responses": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "responses_idx": [
+                2651,
+                313
+            ],
+            "sources": [
+                "cmath.sin",
+                "math.sin",
+                "math.asin",
+                "cmath.sinh",
+                "cmath.rect",
+                "os.killpg",
+                "curses.ascii.SYN",
+                "curses.ascii.SI",
+                "cmath.asin",
+                "stat.S_ISUID"
+            ],
+            "sources_idx": [
+                313,
+                2651,
+                2645,
+                319,
+                304,
+                3149,
+                709,
+                702,
+                310,
+                4065
+            ]
+        },
+        "1": {
+            "ground_truths": [
+                "math.pi"
+            ],
+            "ground_truths_idx": [
+                2665
+            ],
+            "llm_output": "The mathematical constant π, as a float. References: [4]",
+            "query": "1",
+            "responses": [
+                "cmath.pi"
+            ],
+            "responses_idx": [
+                325
+            ],
+            "sources": [
+                "math.asin",
+                "cmath.rect",
+                "math.atan",
+                "cmath.pi",
+                "cmath.polar",
+                "turtle.pd",
+                "turtle.pu",
+                "math.atan2",
+                "cmath.sin",
+                "pdb.pm"
+            ],
+            "sources_idx": [
+                2645,
+                304,
+                2646,
+                325,
+                303,
+                5042,
+                5045,
+                2647,
+                313,
+                3431
+            ]
+        }
+    },
+    "qwen-2-72b + llm_tree_idx": {
+        "0": {
+            "ground_truths": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "ground_truths_idx": [
+                2651,
+                313
+            ],
+            "llm_output": "The sine function is available in both the math and cmath modules. math.sin returns the sine of x radians, while cmath.sin returns the sine of z, which can be a complex number.\nReferences: [1, 2]",
+            "query": "0",
+            "responses": [
+                "math.sin",
+                "cmath.sin"
+            ],
+            "responses_idx": [
+                2651,
+                313
+            ],
+            "sources": [
+                "math.sin",
+                "cmath.sin",
+                "math.degrees",
+                "math.sinh",
+                "math.asin",
+                "math.radians",
+                "cmath.sinh",
+                "math.asinh",
+                "cmath.asinh",
+                "turtle.radians"
+            ],
+            "sources_idx": [
+                2651,
+                313,
+                2653,
+                2659,
+                2645,
+                2654,
+                319,
+                2656,
+                316,
+                5040
+            ]
+        },
+        "1": {
+            "ground_truths": [
+                "math.pi"
+            ],
+            "ground_truths_idx": [
+                2665
+            ],
+            "llm_output": "The mathematical constant π = 3.141592…, to available precision.\nReferences: [1, 10]",
+            "query": "1",
+            "responses": [
+                "math.pi",
+                "cmath.pi"
+            ],
+            "responses_idx": [
+                2665,
+                325
+            ],
+            "sources": [
+                "math.pi",
+                "math.tau",
+                "math.asin",
+                "turtle.radians",
+                "turtle.circle",
+                "math.acos",
+                "turtle.pu",
+                "math.atan",
+                "turtle.right",
+                "cmath.pi"
+            ],
+            "sources_idx": [
+                2665,
+                2667,
+                2645,
+                5040,
+                5025,
+                2644,
+                5045,
+                2646,
+                5012,
+                325
+            ]
+        }
+    }
+}

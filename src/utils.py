@@ -1,25 +1,28 @@
-import json
 import math
 import os
+import shutil
 from pathlib import Path
 
-
-def save_json(path: str, data: dict):
-    with open(
-        path,
-        "w",
-        encoding="utf-8",
-    ) as f:
-        json.dump(data, f, indent=4)
+import orjson
 
 
-def load_json(path: str) -> dict:
-    with open(
-        path,
-        "r",
-        encoding="utf-8",
-    ) as f:
-        return json.load(f)
+def load_json(path: str | Path, allow_empty: bool = False) -> dict:
+    if allow_empty and not os.path.exists(path):
+        return {}
+    with open(path, "r", encoding="utf-8") as f:
+        return orjson.loads(f.read())
+
+
+def save_json(path: str | Path, data: dict):
+    with open(path, "wb") as f:
+        f.write(
+            orjson.dumps(
+                data,
+                option=orjson.OPT_SORT_KEYS
+                + orjson.OPT_SERIALIZE_NUMPY
+                + orjson.OPT_APPEND_NEWLINE,
+            )
+        )
 
 
 def save(path: str, data: str):
@@ -48,6 +51,14 @@ def from_current_file(path: str) -> Path:
 def round_float(x: float, places: int = 3) -> float:
     a = 10**places
     return math.ceil(x * a) / a
+
+
+def remove_path(path: str | Path):
+    shutil.rmtree(path, ignore_errors=True)
+    try:
+        os.remove(path)
+    except OSError:
+        pass
 
 
 def parse_document_content(content: str) -> dict:

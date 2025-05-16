@@ -97,6 +97,16 @@ class RAGPipeline:
         _, scored_docs = self.indexer.index(query, indexer, k=k)
         return self.rag.get_answer(query, model, scored_docs)
 
+    async def request_async(
+        self,
+        query: str,
+        model: ApiModel | LocalModel,
+        k: int,
+        indexer: Indexer,
+    ) -> tuple[str, list[str]]:
+        _, scored_docs = self.indexer.index(query, indexer, k=k)
+        return await self.rag.get_answer_async(query, model, scored_docs)
+
     @property
     def available_models(self) -> list[ApiModel | LocalModel]:
         return self._available_api_models + self._available_local_models

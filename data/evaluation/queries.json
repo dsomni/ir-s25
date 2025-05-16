@@ -1,0 +1,15 @@
+{
+    "0": {
+        "query": "sin",
+        "ground_truths": [
+            "math.sin",
+            "cmath.sin"
+        ]
+    },
+    "1": {
+        "query": "pi",
+        "ground_truths": [
+            "math.pi"
+        ]
+    }
+}

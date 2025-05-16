@@ -127,6 +127,19 @@ class RetrievalAugmentedGeneration:
         except BaseException as e:
             return "", str(e)
 
+    async def get_answer_async(
+        self, query: str, model: str, scored_docs: list[tuple[str, float]]
+    ) -> tuple[str, list[str]]:
+        source_names = [x for x, _ in scored_docs]
+        sources = self._retrieve_docs(source_names)
+        prompt = get_prompt(query, sources)
+        messages = [{"role": "user", "content": prompt}]
+
+        response = await self.client.chat.completions.create(
+            model=model, messages=messages, web_search=False, stream=False
+        )
+        return response.choices[0].message.content, source_names
+
     def _retrieve_docs(self, source_names: list[str]) -> list[str]:
         contents = []
 
