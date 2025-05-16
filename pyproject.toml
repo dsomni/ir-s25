@@ -20,6 +20,7 @@ dependencies = [
     "openai>=1.78.1",
     "pre-commit>=4.2.0",
     "protobuf>=6.31.0",
+    "pybloom-live>=4.0.0",
     "python-dotenv>=1.0.1",
     "ragas>=0.2.15",
     "requests>=2.32.3",

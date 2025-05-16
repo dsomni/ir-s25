@@ -1,5 +1,6 @@
 import typing
 
+from src.bloom import BloomModerator
 from src.inverted_index import InvertedIndex
 from src.llm_indexer import LlmTreeIndexer
 from src.rag import RetrievalAugmentedGeneration
@@ -62,6 +63,7 @@ class RAGPipeline:
         self.rag = RetrievalAugmentedGeneration()
         self.rag_local = RetrievalAugmentedGenerationLocal()
         self.indexer = IndexerPipeline()
+        self.moderator = BloomModerator()
 
     def request(
         self,
