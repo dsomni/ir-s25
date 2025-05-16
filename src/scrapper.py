@@ -13,7 +13,7 @@ DOCS_INDEX_URL = "https://docs.python.org/3.12/py-modindex.html"
 DOCS_URL_PREFIX = "https://docs.python.org/3.12/"
 
 # FileSystem paths
-SAVE_FOLDER = from_current_file("../data")
+SAVE_FOLDER = from_current_file("../data/scrapped")
 
 
 def load_context(url: str) -> bs:
@@ -129,7 +129,7 @@ class ModulesScrapper:
         self._name = (
             f"{'_'.join(sorted(self._selectors))}__{self._modules_index.settings}"
         )
-        self._path = os.path.join(SAVE_FOLDER, "scrapped", self._name)
+        self._path = os.path.join(SAVE_FOLDER, self._name)
         os.makedirs(self._path, exist_ok=True)
 
     def _save(self, name: str, data: str):
