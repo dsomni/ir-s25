@@ -84,10 +84,15 @@ async def get_llm_list():
 
 @app.get("/chat")
 async def chat(prompt: str, k: int, model: ApiModel | LocalModel, indexer: Indexer):
-    return StreamingResponse(
-        RAG_PIPELINE.request(prompt, model, k, indexer),
-        media_type="text/event-stream",
-    )
+    try:
+        return StreamingResponse(
+            RAG_PIPELINE.request(prompt, model, k, indexer),
+            media_type="text/event-stream",
+        )
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)
+        ) from exc
 
 
 if __name__ == "__main__":

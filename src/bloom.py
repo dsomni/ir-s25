@@ -36,7 +36,7 @@ class BloomModerator:
         self.phrase_length = phrase_length
 
         self._words_dir = words_dir
-        self._words_path = os.path.join(self.words_dir, filename)
+        self._words_path = os.path.join(self._words_dir, filename)
 
         if force or not os.path.exists(self._words_path):
             print("Bad words is not found, creating new...")
@@ -72,11 +72,12 @@ class BloomModerator:
                 if "_" in line:
                     self.filter.add(line.replace("_", " "))
 
-    def check_text(self, text: str) -> bool:
+    def check_text(self, text: str) -> tuple[str, bool]:
         words = text.lower().split()
 
-        if any(word in self.filter for word in words):
-            return True
+        for word in words:
+            if word in self.filter:
+                return (word, True)
 
         for i in range(len(words)):
             for j in range(1, self.phrase_length + 1):
@@ -84,5 +85,5 @@ class BloomModerator:
                     continue
                 phrase = " ".join(words[i : i + j])
                 if phrase in self.filter:
-                    return True
-        return False
+                    return (phrase, True)
+        return ("", False)

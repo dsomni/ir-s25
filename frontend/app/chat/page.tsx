@@ -88,7 +88,15 @@ export default function ChatPage() {
             );
 
             if (!response.ok || !response.body) {
-                throw new Error("Failed to connect to backend or response body is missing.");
+                let errorText = undefined;
+                try{
+                errorText = (await response.json()).detail;
+                }
+                catch{
+                    
+                }
+
+                throw new Error(errorText || "Failed to connect to backend or response body is missing.");
             }
 
             const reader = response.body.getReader();

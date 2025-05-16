@@ -72,6 +72,9 @@ class RAGPipeline:
         k: int,
         indexer: Indexer,
     ):
+        bad_phrase, is_bad = self.moderator.check_text(query)
+        if is_bad:
+            raise RuntimeError(f"Bad phrase '{bad_phrase}'")
         _, scored_docs = self.indexer.index(query, indexer, k=k)
         if model in self._available_api_models:
             return self.rag.generate_stream(query, model, scored_docs)
