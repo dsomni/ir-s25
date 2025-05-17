@@ -60,7 +60,7 @@ uv run pre-commit run --all-files
 ```
 
 > \[!IMPORTANT]
-> 📄 We **highly recommend** reading [`about.md`](./about.md) to understand the workflow.
+> 📄 We **highly recommend** reading [`about.md`](./about.md) to understand the workflow
 
 ---
 
@@ -86,7 +86,7 @@ Setup project using script:
   ```
 
 > \[!NOTE]
-> Do not worry: sometimes script takes a while to initialize.
+> Do not worry: sometimes script takes a while to initialize
 
 > \[!WARNING]
 > When setting up using script, you can not pass any flags. For flag description run: `uv run ./src/setup.py -h`

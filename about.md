@@ -25,6 +25,15 @@
   - [🤖 RAG (Retrieval-Augmented Generation)](#-rag-retrieval-augmented-generation)
 - [🚧 Challenges & Solutions](#-challenges--solutions)
 - [🌟 Feature Comparison](#-feature-comparison)
+- [📈 Evaluation & Results](#-evaluation-and-results)
+  - [🧮 Metrics](#-metrics)
+    - [🤖 LLM-specific Metrics](#-llm-specific-metrics)
+    - [📊 General Ranking Metrics](#-general-ranking-metrics)
+  - [🔄 Evaluation Workflow](#-evaluation-workflow)
+  - [🏆 Results](#-results)
+    - [🤖 LLM-specific Results](#-llm-specific-results)
+    - [📊 General Ranking Results](#-general-ranking-results)
+- [💬 Discussion](#-discussion)
 
 ---
 
@@ -255,3 +264,76 @@ The merged document is [`data/bad_words/bad_words.txt`](./data/bad_words/bad_wor
 | Inverted Index   | Inverted Index + Levenshtein distance | High speed, exact match, lightweight                                             |
 | Embedding Search | LLM Embeddings + Ball Tree            | Resilient to synonyms and phrasing                                               |
 | RAG              | API + Prompt Engineering              | Multi-source synthesis, deep answers, citation-based, filters irrelevant content |
+
+## 📈 Evaluation and Results
+
+The code for evaluation and charts plotting is located in [src/notebooks/evaluate.ipynb](./src/notebooks/evaluate.ipynb) Python notebook
+
+### 🧮 Metrics
+
+We evaluate our system using two groups of metrics: **LLM-specific Metrics** and **General Ranking Metrics**.
+
+#### 🤖 LLM-specific Metrics
+
+These metrics assess the quality and relevance of language model answers in a retrieval-augmented generation (RAG) setup. All are computed via embedding-based similarity using cosine similarity of embeddings between answers, contexts, queries, and ground truths.
+
+- **[Answer Relevancy](https://en.wikipedia.org/wiki/Semantic_similarity)**: Semantic similarity between the generated answer and the input query, reflecting how relevant the answer is to the question
+- **[BLEU](https://aclanthology.org/P02-1040/)**: A precision-based metric evaluating n-gram overlap between generated answer and ground truth references, widely used in machine translation and text generation
+- **Context Precision**: Maximum semantic similarity between the generated answer and each retrieved context document, indicating how well the answer aligns with the context
+- **Context Recall**: Semantic similarity between ground truth answers and aggregated context documents, showing how well the context covers the correct answer
+- **Faithfulness**: Measures how faithfully the answer is grounded in the retrieved context, computed as similarity between the answer and combined context embeddings
+- **[ROUGE-1](https://aclanthology.org/W04-1013/)**: Measures unigram overlap between generated answer and ground truth, indicating content similarity
+
+#### 📊 General Ranking Metrics
+
+Standard information retrieval metrics to evaluate the quality of document retrieval and ranking at cutoff \(K\):
+
+- **F1@K**: Harmonic mean of precision and recall of relevant documents within top \(K\)
+- **[MAP@K](https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-ranked-retrieval-results-1.html)** (Mean Average Precision): Average precision of relevant documents ranked highly within top \(K\)
+- **MAR@K** (Mean Average Recall): Average recall at cutoff \(K\), measuring proportion of relevant documents retrieved
+- **[MRR@K](https://en.wikipedia.org/wiki/Mean_reciprocal_rank)** (Mean Reciprocal Rank): Average reciprocal rank of the first relevant document within top \(K\), rewarding early relevant retrieval
+- **[nDCG@K](https://en.wikipedia.org/wiki/Discounted_cumulative_gain)** (Normalized Discounted Cumulative Gain): Evaluates ranking quality by considering relevance and position of documents, favoring relevant documents appearing earlier
+
+### 🔄 Evaluation Workflow
+
+We have decided to compare two models with API: `qwen-2-72b` and `evil`, in combinations with both proposed indexers: `inverted_idx` and `llm_tree_idx`.
+Therefore, there were four RAG architectures for comparison: `qwen-2-72b + inverted_idx`, `evil + inverted_idx`, `qwen-2-72b + llm_tree_idx` and `evil + llm_tree_idx`. Also, for general ranking metrics, we have compared the both indexers themselves in addition to RAG models.
+
+Without details, the evaluation workflow the was as following:
+
+1. Come up with the "evaluation queries" together with the ground truths. You can find the queries in [data/evaluation/queries.json](./data/evaluation/queries.json)
+2. Generate and parse responses of models (both RAG and indexers) and save the results
+3. Compute metrics based on the responses and save them
+4. Plot the obtained results
+
+Generally, you can find all the files generated during steps 1-3 in [data/evaluation/](./data/evaluation/) folder.
+
+### 🏆 Results
+
+You can find the following generated pictures in [pictures/evaluation/](./pictures/evaluation/) folder.
+
+#### 🤖 LLM-specific results
+
+![LLM Mean Heatmap](./pictures/evaluation/llm_mean_heatmap.png)
+![LLM Metrics](./pictures/evaluation/llm_combined_metrics.png)
+
+In average, combination `evil + llm_tree_idx` demonstrates the best performance in terms of LLM-specific metrics. However, the `qwen-2-72b + llm_tree_idx` combination demonstrates quite similar results and even sometimes outperforms the `evil + llm_tree_idx` in terms of maximum and median metrics. Although the supremacy of `evil + llm_tree_idx` is questionable, it is obvious that all the solutions with `llm_tree_idx` outperforms solutions with `inverted_idx`, which is not surprising.
+
+#### 📊 General Ranking results
+
+![Ranking Metrics Heatmap](./pictures/evaluation/general_combined_heatmap.png)
+![Ranking Metrics](./pictures/evaluation/general_combined_metrics.png)
+
+As in case of LLM-specific metrics, it is hard to determine the absolute leader between `evil + llm_tree_idx` and `qwen-2-72b + llm_tree_idx`, but `qwen-2-72b + llm_tree_idx` is seamed to be superior in average. The RAG architectures outperform both indexers, and `llm_tree_idx` outperforms `inverted_idx`, so the corresponding RAG solutions do, which is not surprising. What is surprising is that adding the RAG solutions with concrete indexer usually outperform the both individual indexers.
+
+## 💬 Discussion
+
+The PyFinder project showcases a well-orchestrated integration of classical information retrieval techniques, modern deep learning models, and robust system engineering. A central pillar of the success of the system lies in the design and execution of its workflow, which effectively ties together multiple modular components to create a smooth, intelligent search and question-answering experience.
+
+The workflow architecture plays a crucial role in ensuring the end-to-end system remains accurate, performant, and user-friendly. Starting from the frontend, user queries are immediately filtered through a Bloom filter to remove any offensive content. This is followed by optional preprocessing via the Norvig Spell Corrector, which ensures higher robustness against user typos or formatting inconsistencies. The query then travels to either the indexers (Inverted Index or LLM Embeddings + Ball Tree) or the RAG module, depending on the selected mode.
+
+This multi-stage approach ensures each module does what it does best: the indexers provide fast and focused retrieval, while the LLMs generate contextually grounded and human-readable answers. Importantly, each module is loosely coupled, making the workflow extensible and replaceable — for example, swapping out the indexer or LLM requires minimal adjustment elsewhere in the pipeline.
+
+Despite these strengths, there are areas that merit further exploration. The performance difference between `evil` and `qwen-2-72b` was not always substantial, which suggests diminishing returns when increasing LLM complexity beyond a certain point. Additionally, hosted LLMs, while convenient and powerful, introduce latency and reliability concerns due to rate limits and dependency on external APIs.
+
+In conclusion, PyFinder successfully integrates classical IR techniques with modern LLM-driven retrieval and generation, achieving both speed and semantic depth. Future directions may include fine-tuning the embedding models on wider range of Python-specific corpora and libraries, dynamically selecting LLMs based on query complexity. The framework also provides a strong foundation for extending support to other programming languages or documentation domains.
