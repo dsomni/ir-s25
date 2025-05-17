@@ -68,6 +68,9 @@ uv run pre-commit run --all-files
 
 ### 🛠️ Setup
 
+> \[!WARNING]
+> Make sure that you have installed all the python dependencies (check [🚀 Before You Start](#-before-you-start) for details)
+
 Setup project using script:
 
 - **Windows**:
