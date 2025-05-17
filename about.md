@@ -31,6 +31,7 @@
     - [📊 General Ranking Metrics](#-general-ranking-metrics)
   - [🔄 Evaluation Workflow](#-evaluation-workflow)
   - [🏆 Results](#-results)
+    - [⏰ Elapsed Time Results](#-elapsed-time-results)
     - [🤖 LLM-specific Results](#-llm-specific-results)
     - [📊 General Ranking Results](#-general-ranking-results)
 - [💬 Discussion](#-discussion)
@@ -271,7 +272,7 @@ The code for evaluation and charts plotting is located in [src/notebooks/evaluat
 
 ### 🧮 Metrics
 
-We evaluate our system using two groups of metrics: **LLM-specific Metrics** and **General Ranking Metrics**.
+We have evaluated our system using two groups of metrics: **LLM-specific Metrics** and **General Ranking Metrics**.
 
 #### 🤖 LLM-specific Metrics
 
@@ -297,7 +298,7 @@ Standard information retrieval metrics to evaluate the quality of document retri
 ### 🔄 Evaluation Workflow
 
 We have decided to compare two models with API: `qwen-2-72b` and `evil`, in combinations with both proposed indexers: `inverted_idx` and `llm_tree_idx`.
-Therefore, there were four RAG architectures for comparison: `qwen-2-72b + inverted_idx`, `evil + inverted_idx`, `qwen-2-72b + llm_tree_idx` and `evil + llm_tree_idx`. Also, for general ranking metrics, we have compared the both indexers themselves in addition to RAG models.
+Therefore, there were four RAG architectures for comparison: `qwen-2-72b + inverted_idx`, `evil + inverted_idx`, `qwen-2-72b + llm_tree_idx` and `evil + llm_tree_idx`. Also, for general ranking metrics, we have compared the both indexers themselves in addition to RAG models. All the models were evaluating on retrieving 10 results.
 
 Without details, the evaluation workflow the was as following:
 
@@ -311,6 +312,14 @@ Generally, you can find all the files generated during steps 1-3 in [data/evalua
 ### 🏆 Results
 
 You can find the following generated pictures in [pictures/evaluation/](./pictures/evaluation/) folder.
+
+#### ⏰ Elapsed Time Results
+
+![LLM Elapsed TIme](./pictures/evaluation/llm_elapsed_time.png)
+![Indexer Elapsed TIme](./pictures/evaluation/indexer_elapsed_time.png)
+![Mean Elapsed Time Heatmap](./pictures/evaluation/mean_elapsed_time_heatmap.png)
+
+As it was expected, the RAG approaches takes significantly more time that individual indexers. Surprisingly, the `llm_tree_idx` outperforms `inverted_idx` in terms of elapsed time, event though it uses the LLM to build embeddings. That means that transformer architectures are quite fast on inference.
 
 #### 🤖 LLM-specific results
 
