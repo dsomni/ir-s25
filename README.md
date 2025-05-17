@@ -70,7 +70,8 @@ uv run pre-commit run --all-files
 
 > \[!IMPORTANT]
 > Make sure that you have installed all the python dependencies (check [🚀 Before You Start](#-before-you-start) for details)
-> Setup project using script:
+
+Setup project using script:
 
 - **Windows**:
 
@@ -86,8 +87,11 @@ uv run pre-commit run --all-files
 
 > \[!NOTE]
 > Do not worry: sometimes script takes a while to initialize.
+
 > \[!WARNING]
 > When setting up using script, you can not pass any flags. For flag description run: `uv run ./src/setup.py -h`
+
+Or run corresponding python script:
 
 ```bash
 uv run ./src/setup.py
