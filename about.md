@@ -49,7 +49,7 @@
   - **LLM Embeddings + Ball Tree**
 
 - **Chat Mode (RAG)**
-  Ask natural language questions and get intelligent, sourced answers via Retrieval-Augmented Generation (RAG) powered by LLMs.
+  Ask natural language questions and get intelligent, sourced answers via Retrieval-Augmented Generation (RAG) powered by LLMs
 
 ---
 
@@ -88,14 +88,14 @@
 
 ### 🧩 Workflows
 
-1. **Frontend ➔ Bloom** — Filters bad content
-2. **Frontend ➔ Norvig** — Spell corrector
-3. **Frontend ➔ Scraped Data** — Displays scraped docs
-4. **Bloom ➔ RAG** — Sends clean query to RAG
-5. **RAG ➔ Norvig** — Filters bad content
-6. **Norvig ➔ Indexer** — Fetches relevant docs
-7. **Indexer ➔ Scraped Data** — Retrieves matched files
-8. **RAG ➔ LLM API** — Generates and returns LLM answer
+1. **Frontend ➡️ Bloom** — Filters bad content
+2. **Frontend ➡️ Norvig** — Spell corrector
+3. **Frontend ➡️ Scraped Data** — Displays scraped docs
+4. **Bloom ➡️ RAG** — Sends clean query to RAG
+5. **RAG ➡️ Norvig** — Filters bad content
+6. **Norvig ➡️ Indexer** — Fetches relevant docs
+7. **Indexer ➡️ Scraped Data** — Retrieves matched files
+8. **RAG ➡️ LLM API** — Generates and returns LLM answer
 
 ---
 
@@ -178,10 +178,7 @@ The merged document is [`data/bad_words/bad_words.txt`](./data/bad_words/bad_wor
 #### 2. Search
 
 - Uses Levenshtein distance
-- Ranks using TF-IDF weighted by similarity:
-  \[
-  \text{Score} = \frac{1}{1 + \text{edit distance}}
-  \]
+- Ranks using TF-IDF weighted by inverse Levenshtein distance
 
 #### 3. Fuzzy Matching
 
@@ -221,7 +218,7 @@ The merged document is [`data/bad_words/bad_words.txt`](./data/bad_words/bad_wor
 
 - Restricts answers to context (fetched Python documents)
 - Requires citations
-- Forbids unsourced info and code
+- Forbids unsource info and code
 
 #### 2. Modes
 
@@ -241,7 +238,7 @@ The merged document is [`data/bad_words/bad_words.txt`](./data/bad_words/bad_wor
 - Streaming + rate limiting
 - Error and timeout handling
 
-#### Key Features
+#### RAG Key Features
 
 - Python-only responses
 - JSON-formatted streaming output
@@ -276,7 +273,7 @@ We have evaluated our system using two groups of metrics: **LLM-specific Metrics
 
 #### 🤖 LLM-specific Metrics
 
-These metrics assess the quality and relevance of language model answers in a retrieval-augmented generation (RAG) setup. All are computed via embedding-based similarity using cosine similarity of embeddings between answers, contexts, queries, and ground truths.
+These metrics assess the quality and relevance of language model answers in a retrieval-augmented generation (RAG) setup. All metrics are computed via embedding-based similarity using cosine similarity of embeddings between answers, contexts, queries, and ground truths.
 
 - **[Answer Relevancy](https://en.wikipedia.org/wiki/Semantic_similarity)**: Semantic similarity between the generated answer and the input query, reflecting how relevant the answer is to the question
 - **[BLEU](https://aclanthology.org/P02-1040/)**: A precision-based metric evaluating n-gram overlap between generated answer and ground truth references, widely used in machine translation and text generation
@@ -287,12 +284,12 @@ These metrics assess the quality and relevance of language model answers in a re
 
 #### 📊 General Ranking Metrics
 
-Standard information retrieval metrics to evaluate the quality of document retrieval and ranking at cutoff \(K\):
+Standard information retrieval metrics to evaluate the quality of document retrieval and ranking at cutoff K:
 
-- **F1@K**: Harmonic mean of precision and recall of relevant documents within top \(K\)
-- **[MAP@K](https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-ranked-retrieval-results-1.html)** (Mean Average Precision): Average precision of relevant documents ranked highly within top \(K\)
-- **MAR@K** (Mean Average Recall): Average recall at cutoff \(K\), measuring proportion of relevant documents retrieved
-- **[MRR@K](https://en.wikipedia.org/wiki/Mean_reciprocal_rank)** (Mean Reciprocal Rank): Average reciprocal rank of the first relevant document within top \(K\), rewarding early relevant retrieval
+- **F1@K**: Harmonic mean of precision and recall of relevant documents within top K
+- **[MAP@K](https://nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-ranked-retrieval-results-1.html)** (Mean Average Precision): Average precision of relevant documents ranked highly within top K
+- **MAR@K** (Mean Average Recall): Average recall at cutoff K, measuring proportion of relevant documents retrieved
+- **[MRR@K](https://en.wikipedia.org/wiki/Mean_reciprocal_rank)** (Mean Reciprocal Rank): Average reciprocal rank of the first relevant document within top K, rewarding early relevant retrieval
 - **[nDCG@K](https://en.wikipedia.org/wiki/Discounted_cumulative_gain)** (Normalized Discounted Cumulative Gain): Evaluates ranking quality by considering relevance and position of documents, favoring relevant documents appearing earlier
 
 ### 🔄 Evaluation Workflow
@@ -300,7 +297,7 @@ Standard information retrieval metrics to evaluate the quality of document retri
 We have decided to compare two models with API: `qwen-2-72b` and `evil`, in combinations with both proposed indexers: `inverted_idx` and `llm_tree_idx`.
 Therefore, there were four RAG architectures for comparison: `qwen-2-72b + inverted_idx`, `evil + inverted_idx`, `qwen-2-72b + llm_tree_idx` and `evil + llm_tree_idx`. Also, for general ranking metrics, we have compared the both indexers themselves in addition to RAG models. All the models were evaluating on retrieving 10 results.
 
-Without details, the evaluation workflow the was as following:
+Without details, the evaluation workflow was as following:
 
 1. Come up with the "evaluation queries" together with the ground truths. You can find the queries in [data/evaluation/queries.json](./data/evaluation/queries.json)
 2. Generate and parse responses of models (both RAG and indexers) and save the results

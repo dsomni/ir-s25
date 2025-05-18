@@ -87,16 +87,6 @@ class RAGPipeline:
         else:
             raise RuntimeError(f"Unknown model '{model}'")
 
-    def request_full(
-        self,
-        query: str,
-        model: ApiModel,
-        k: int,
-        indexer: Indexer,
-    ) -> tuple[str, str]:
-        _, scored_docs = self.indexer.index(query, indexer, k=k)
-        return self.rag.get_answer(query, model, scored_docs)
-
     async def request_async(
         self,
         query: str,

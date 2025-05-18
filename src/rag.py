@@ -111,22 +111,6 @@ class RetrievalAugmentedGeneration:
 
         yield (json.dumps({"type": "complete", "data": time.time() - start}) + "\n\n")
 
-    def get_answer(
-        self, query: str, model: str, scored_docs: list[tuple[str, float]]
-    ) -> tuple[str, str]:
-        source_names = [x for x, _ in scored_docs]
-        sources = self._retrieve_docs(source_names)
-        prompt = get_prompt(query, sources)
-        messages = [{"role": "user", "content": prompt}]
-
-        try:
-            response = self.sync_client.chat.completions.create(
-                model=model, messages=messages, web_search=False, stream=False
-            )
-            return response.choices[0].message.content, ""
-        except BaseException as e:
-            return "", str(e)
-
     async def get_answer_async(
         self, query: str, model: str, scored_docs: list[tuple[str, float]]
     ) -> tuple[str, list[str]]:

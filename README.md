@@ -207,7 +207,6 @@ Or start frontend/backend separately:
 │   │   ├── content_filter.ipynb
 │   │   ├── evaluate.ipynb     # For metrics evaluation
 │   │   ├── inverted_index.ipynb
-│   │   ├── rag.ipynb
 │   │   ├── scrapper.ipynb
 │   │   ├── spellcheck.ipynb
 │   │   └── w2v_indexer.ipynb
@@ -231,6 +230,7 @@ Or start frontend/backend separately:
 ├── .python-version
 ├── about.md                   # Project description
 ├── main.py                    # FastAPI backend application
+├── presentation.pdf           # Project presentation
 ├── pyproject.toml             # Dependency and tool config
 ├── uv.lock
 └── README.md                  # Project documentation (this file)
